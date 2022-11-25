@@ -72,19 +72,6 @@ const client = new line.Client({
   channelAccessToken: TOKEN
 });
 
-const message = {
-  type: 'text',
-  text: 'Hello World!'
-};
-
-client.pushMessage('<to>', message)
-  .then(() => {
-    //
-  })
-  .catch((err) => {
-    // error handling
-  });
-
   
 let auth = (req, res, next) => {
 	// Session Check
@@ -120,10 +107,10 @@ let IsInputOk = function (InputTime) {
 function timerFunc(func, dateTime){
   let time = Number(dateTime.substring(0,2));
   let minute = Number(dateTime.substring(2,4));
-let today = new Date()
-let year = today.getFullYear()
-let month = today.getMonth()
-let day = today.getDate()
+  let today = new Date()
+  let year = today.getFullYear()
+  let month = today.getMonth()
+  let day = today.getDate()
 
   let oprDate = new Date(year, month, day, time, minute); //동작을 원하는 시간의 Date 객체를 생성합니다.
   let nowDate = new Date();
@@ -158,13 +145,8 @@ let day = today.getDate()
           text: 'Hello World!'
         };
 
-        let repmsg = timerFunc( client.pushMessage(user, message)
-        .then(() => {
-          //
-        })
-        .catch((err) => {
-          // error handling
-        }) , alarmdate)
+        let repmsg = timerFunc( (user, message) => {client.pushMessage(user, message
+        );} , alarmdate)
         
       // Message data, must be stringified
       const dataString = JSON.stringify({
