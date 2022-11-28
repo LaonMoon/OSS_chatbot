@@ -1,4 +1,4 @@
-const User = require("./model/user").User
+const User = require("./models/user").User
 
 async function print() {
     let user = await User.load('U3c5199b84bae262c48381504168fe4b2')

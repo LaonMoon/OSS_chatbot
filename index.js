@@ -1,31 +1,24 @@
-const https = require("https")
-const express = require("express")
+const https = require('https')
+const fs = require('fs')
+const path = require('path')
+const express = require('express')
 const app = express()
-const line = require('@line/bot-sdk')
-const middleware = require('@line/bot-sdk').middleware
-const Client = require('@line/bot-sdk').Client
 
-const PORT = process.env.PORT || 3000
-const TOKEN = process.env.LINE_ACCESS_TOKEN
+const PORT = process.env.PORT || 23023
+const TOKEN = process.env.LINE_ACCESS_TOKEN || ''
 
-const config = {
-    channelAccessToken: 'n/FsngKwPgrLhglag8dqI994iPBAFGlWAZ049Hiq1F5tsguZbDxksyWj3zskC0TFsCOCGraTNp0yg7YLdTm+wOZeDuUKNuu/2Xvz9azWjqMyKy3t+68MjDEK50ytYmjcQFImAvBJ5hC1ZayLOqHcSwdB04t89/1O/w1cDnyilFU=',
-    channelSecret: '3937dd366ad9ae26ec016a2abc831513'
-}
 app.use(express.json())
-app.use(express.urlencoded({
-    extended: true
-}))
+app.use(express.urlencoded({extended: true}))
 
 app.get("/", (req, res) => {
     res.sendStatus(200)
 })
 
-app.post("/webhook", middleware(config), (req, res) => {
+app.post("/webhook", (req, res) => {
     res.send("HTTP POST request sent to the webhook URL!")
     // If the user sends a message to your bot, send a reply message
     console.log(req.body)
-    console.log(req.body.events[0].source.userId)
+    // console.log(req.body.events[0].source.userId)
     if (req.body.events[0].type === "message") {
         // Message data, must be stringified
         const dataString = JSON.stringify({
@@ -75,11 +68,14 @@ app.post("/webhook", middleware(config), (req, res) => {
     }
 })
 
-const User = require('./model/user').User
+const domain = "2017104014.oss2022chatbot.ml"
+const sslport = 23023;
+const option = {
+    ca: fs.readFileSync('/etc/letsencrypt/live/' + domain +'/fullchain.pem'),
+    key: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/' + domain +'/privkey.pem'), 'utf8').toString(),
+    cert: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/' + domain +'/cert.pem'), 'utf8').toString(),
+}
 
-let user = new User('abcd')
-console.log(user.GetUserId())
-
-/* app.listen(PORT, () => {
-    console.log('Example app listening at http://localhost:${PORT}')
-}) */
+https.createServer(option, app).listen(sslport, () => {
+    console.log(`[HTTPS] Server is started on port ${sslport}`);
+})
