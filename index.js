@@ -77,7 +77,7 @@ app.post("/webhook", (req, res) => {
 })
 
 const domain = "2017104014.oss2022chatbot.ml"
-const sslport = 23023;
+const sslport = 23023
 const option = {
     ca: fs.readFileSync('/etc/letsencrypt/live/' + domain +'/fullchain.pem'),
     key: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/' + domain +'/privkey.pem'), 'utf8').toString(),
@@ -85,5 +85,5 @@ const option = {
 }
 
 https.createServer(option, app).listen(sslport, () => {
-    console.log(`[HTTPS] Server is started on port ${sslport}`);
+    console.log(`[HTTPS] Server is started on port ${sslport}`)
 })

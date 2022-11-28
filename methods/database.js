@@ -45,7 +45,7 @@ module.exports.MySQL = MySQL */
 
 const mysql = require('mysql2/promise')
 
-connection = mysql.createPool({
+pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: 'Woals0313!',
@@ -54,17 +54,17 @@ connection = mysql.createPool({
 })
 
 async function Execute(sql) {
-    const conn =  await connection.getConnection()
+    const conn =  await pool.getConnection()
 
     try {
         const [result] = await conn.query(sql)
         return result
     }
     catch (err) {
-        throw new Error(err)
+        throw err
     }
     finally {
-        conn.release()
+        await conn.release()
     }
 }
 
