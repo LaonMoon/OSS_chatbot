@@ -1,4 +1,4 @@
-const mysqlx = require('@mysql/xdevapi')
+/* const mysqlx = require('@mysql/xdevapi')
 
 class MySQL {
 
@@ -6,7 +6,7 @@ class MySQL {
     #session
 
     constructor() {
-        this.result = [1, 2, 3, 4]
+        this.result = []
     }
 
     async Execute(sql) {
@@ -37,9 +37,35 @@ class MySQL {
         .catch(err => {
             throw err
         })
-        console.log(this.result)
         return this.result
     }
 }
 
-module.exports.MySQL = MySQL
+module.exports.MySQL = MySQL */
+
+const mysql = require('mysql2/promise')
+
+connection = mysql.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: 'Woals0313!',
+    connectionLimit: 4,
+    database: 'samplebot'
+})
+
+async function Execute(sql) {
+    const conn =  await connection.getConnection()
+
+    try {
+        const [result] = await conn.query(sql)
+        return result
+    }
+    catch (err) {
+        throw new Error(err)
+    }
+    finally {
+        conn.release()
+    }
+}
+
+module.exports.Execute = Execute

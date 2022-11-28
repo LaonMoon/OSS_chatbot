@@ -1,10 +1,17 @@
 const https = require("https")
 const express = require("express")
 const app = express()
+const line = require('@line/bot-sdk')
+const middleware = require('@line/bot-sdk').middleware
+const Client = require('@line/bot-sdk').Client
 
 const PORT = process.env.PORT || 3000
 const TOKEN = process.env.LINE_ACCESS_TOKEN
 
+const config = {
+    channelAccessToken: 'n/FsngKwPgrLhglag8dqI994iPBAFGlWAZ049Hiq1F5tsguZbDxksyWj3zskC0TFsCOCGraTNp0yg7YLdTm+wOZeDuUKNuu/2Xvz9azWjqMyKy3t+68MjDEK50ytYmjcQFImAvBJ5hC1ZayLOqHcSwdB04t89/1O/w1cDnyilFU=',
+    channelSecret: '3937dd366ad9ae26ec016a2abc831513'
+}
 app.use(express.json())
 app.use(express.urlencoded({
     extended: true
@@ -14,7 +21,7 @@ app.get("/", (req, res) => {
     res.sendStatus(200)
 })
 
-app.post("/webhook", (req, res) => {
+app.post("/webhook", middleware(config), (req, res) => {
     res.send("HTTP POST request sent to the webhook URL!")
     // If the user sends a message to your bot, send a reply message
     console.log(req.body)

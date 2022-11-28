@@ -1,61 +1,66 @@
-const MySQL = require("../methods/database").MySQL
+const db = require("../methods/database")
 
 class User {
     //private
     #userId = ""
     #state = ""
+    #alarmTime = 0
     #menuList = []
-
     //public
-    constructor(_userId) {
-        this.#userId = _userId
-        this.#state = "following"
-        this.save()
+    constructor(userId) {
+        this.userId = userId
+        this.state = "following"
+        this.menuList = []
     }
     //getter
-    get_userId() {
+    get userId() {
         return this.#userId
     }
-    get_menuList() {
-        return this.#menuList
-    }
-    get_state() {
+    get state() {
         return this.#state
     }
+    get menuList() {
+        return this.#menuList
+    }
     //setter
-    set_State(_state) {
-        this.#state = _state
+    set userId(userId) {
+        this.#userId = userId
+    }
+    set state(state) {
+        this.#state = state
+    }
+    set menuList(menuList) {
+        this.#menuList = menuList
     }
     //methods
     AddMenuList(menu) {
         this.#menuList.push(menu)
     }
     DelMenu(menu) {
-        let idx = this.#menuList.indexOf(menu)
+        const idx = this.#menuList.indexOf(menu)
+        this.#menuList.splice(idx, 1)
     }
-    save() {
+    async save() {
         try {
-            let mysql = MySQL()
-            let sql = `INSERT INTO user (userId, state) VALUES (${this.#userId}, ${this.#state});`
-            let result = mysql.Sql(sql)
+            let sql = `INSERT INTO user (userId, state) VALUES ('${this.userId}', '${this.state}');`
+            let result = await db.Execute(sql)
             return result
         }
-        catch {
+        catch(err) {
             console.log(err)
         }
     }
     //static
-    static Load(userId) {
+    static async load(userId) {
         try {
-            let mysql = new MySQL()
             let sql = `SELECT * FROM user where userId = '${userId}';`
-            let results = mysql.Execute(sql)
-            let user = new User(results[0]['userId'])
-            user.SetState(results[0]['state'])
+            let result = await db.Execute(sql)
+            let user = new User(result[0]['userId'])
+            user.#state = result[0]['state']
             sql = `SELECT * FROM user_menulist where userId = '${userId}';`
-            results = mysql.Execute(sql)
-            for (let idx in results) {
-                user.AddMenuList(results[idx]['menu'])
+            result = await db.Execute(sql)
+            for (let idx in result) {
+                await user.AddMenuList(result[idx]['menu'])
             }
             return user
         }
