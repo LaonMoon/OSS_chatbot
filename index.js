@@ -3,22 +3,30 @@ const fs = require('fs')
 const path = require('path')
 const express = require('express')
 const app = express()
+const line = require('@line/bot-sdk')
+const middleware = require('@line/bot-sdk').middleware
+const Client = require('@line/bot-sdk').Client
 
 const PORT = process.env.PORT || 23023
 const TOKEN = process.env.LINE_ACCESS_TOKEN || ''
+const config = {
+    channelAcessToken: '',
+    channelSecret: ''
+}
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
+// GET "/"
 app.get("/", (req, res) => {
     res.sendStatus(200)
 })
 
+// POST "/webhook"
 app.post("/webhook", (req, res) => {
     res.send("HTTP POST request sent to the webhook URL!")
     // If the user sends a message to your bot, send a reply message
     console.log(req.body)
-    // console.log(req.body.events[0].source.userId)
     if (req.body.events[0].type === "message") {
         // Message data, must be stringified
         const dataString = JSON.stringify({
