@@ -1,1 +1,5 @@
-/testCodes/node_modules
+#dotenv enviroment variable files
+.env
+
+#node_modules
+/testCodes/node_modules/
