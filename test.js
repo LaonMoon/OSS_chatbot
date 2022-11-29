@@ -1,5 +1,5 @@
 const User = require("./models/user").User
-const dataLoader = require("./methods/dataLoader")
+const MenuData = require('./models/menudata').MenuData
 
 async function print() {
     let user = await User.load('U3c5199b84bae262c48381504168fe4b2')
@@ -10,9 +10,13 @@ async function print() {
 }
 async function print2(){
     let data = await dataLoader.GetMenuData()
-    console.log(data)
     data = await dataLoader.ProcessData(data)
-    console.log(data)
+    await dataLoader.SaveData(data)
+}
+async function print3() {
+    let menudata = await MenuData.load('2022-11-29')
+    console.log(menudata.data)
 }
 print()
-print2()
+//print2()
+print3()

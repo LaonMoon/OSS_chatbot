@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 })
 
 // POST "/webhook"
-app.post("/webhook", (req, res) => {
+app.post("/webhook", middleware(config), (req, res) => {
     res.send("HTTP POST request sent to the webhook URL!")
     // If the user sends a message to your bot, send a reply message
     console.log(req.body)
