@@ -4,8 +4,11 @@ import app from './config/express';
 
 const https = require("https")
 const express = require("express")
+
 const TOKEN = process.env.channelAccessToken;
 const PORT = process.env.SERVER_PORT;
+
+
 app.use(express.json())
 app.use(express.urlencoded({
     extended: true

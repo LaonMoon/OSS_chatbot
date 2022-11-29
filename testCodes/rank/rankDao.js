@@ -1,8 +1,9 @@
 //create_time이 오늘 날자인 거 안에서 해당 menu의 rank를 평균으로 제공
-export const seuslectmenurank = async(connection)=>{
+export const selectmenurank = async(connection)=>{
 
-    const selectmenurankQuery = ``;
-    const [menurankRows] = await connection.query();
+    const selectmenurankQuery = `select sum(menu_rank)/count(ID)
+    FROM menu_review`;
+    const menurankRows = await connection.query(selectmenurankQuery);
     return menurankRows;
 }
 
