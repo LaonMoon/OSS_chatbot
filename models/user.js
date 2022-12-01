@@ -1,18 +1,18 @@
 const db = require("../methods/database")
 
 class User {
-    //private
+    // private
     #userId = ""
     #state = ""
     #alarmTime = 0
     #menuList = []
-    //public
+    // constructor
     constructor(userId) {
         this.userId = userId
         this.state = "following"
         this.menuList = []
     }
-    //getter
+    // getter
     get userId() {
         return this.#userId
     }
@@ -22,7 +22,7 @@ class User {
     get menuList() {
         return this.#menuList
     }
-    //setter
+    // setter
     set userId(userId) {
         this.#userId = userId
     }
@@ -32,7 +32,7 @@ class User {
     set menuList(menuList) {
         this.#menuList = menuList
     }
-    //methods
+    // methods
     AddMenuList(menu) {
         this.#menuList.push(menu)
     }
@@ -42,15 +42,21 @@ class User {
     }
     async save() {
         try {
-            let sql = `INSERT INTO user (userId, state) VALUES ('${this.userId}', '${this.state}');`
-            let result = await db.Execute(sql)
+            const sql = `INSERT INTO user (userId, state) VALUES ('${this.userId}', '${this.state}');`
+            const result = await db.Execute(sql)
             return result
         }
-        catch(err) {
-            console.log(err)
-        }
+        catch(err) { throw err }
     }
-    //static
+    async delete() {
+        try {
+            const sql = `DROP FROM user WHERE userId = '${this.userId}'`
+            const result = await db.Execute(sql)
+            return result
+        }
+        catch (err) { throw err }
+    }
+    // static
     static async load(userId) {
         try {
             let sql = `SELECT * FROM user where userId = '${userId}';`
@@ -65,7 +71,7 @@ class User {
             return user
         }
         catch(err) {
-            console.log(err)
+            throw err
         }
     }
 }

@@ -1,4 +1,5 @@
 const db = require('../methods/database')
+const axios = require('axios')
 
 class MenuData {
     //private
@@ -26,9 +27,9 @@ class MenuData {
         let sql_keys = ''
         let sql_values = ''
         for(let row of rows) {
-            sql_keys = ''
-            sql_values = ''
-            keys = Object.keys(row)
+            let sql_keys = ''
+            let sql_values = ''
+            let keys = Object.keys(row)
             for(let key of keys) {
                 sql_keys += (key + ', ')
                 sql_values += ("'" + row[key]  + "'" + ', ')

@@ -1,7 +1,5 @@
 const mysql = require('mysql2/promise')
-const axios = require('axios')
-
-pool = mysql.createPool({
+const connection = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: 'Woals0313!',
@@ -9,20 +7,22 @@ pool = mysql.createPool({
     database: 'samplebot'
 })
 
-async function Execute(sql) {
-
-    const conn =  await pool.getConnection()
+const sql = 'SELECT * FROM user'
+const result = async () => {
+    const conn = connection.getConnection()
 
     try {
-        const [result] = await conn.query(sql)
-        return result
+        const [row] = await conn.query("SELECT * FROM user")
+        return row
     }
-    catch (err) {
-        throw err
+    catch(err) {
+        throw new Error(err)
     }
     finally {
-        await conn.release()
+        conn.release()
     }
 }
 
-module.exports.Execute = Execute
+console.log(result)
+
+module.exports.MySQL = MySQL
