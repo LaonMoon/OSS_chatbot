@@ -23,8 +23,6 @@ const config = {
 }
 
 app.post("/webhook", middleware(config), (req, res) => {
-    res.send("HTTP POST request sent to the webhook URL!")
-    // If the user sends a message to your bot, send a reply message
     Promise
     .all(req.body.events.map(handleEvent))
     .then(result => res.json(result))
