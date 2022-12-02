@@ -30,10 +30,10 @@ export const showReview= async()=>{
     return selectRankResult;
 }
 
-export const showMenuRank= async()=>{
+export const showMenuRank= async(menu)=>{
     const conn = await pool.getConnection(async(conn)=>conn);
 
-    const selectRankResult = await selectmenurank(conn);
+    const selectRankResult = await selectmenurank(conn,menu);
     conn.release;
     return selectRankResult;
 }

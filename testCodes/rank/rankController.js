@@ -50,7 +50,8 @@ export const getReviewsRanks=async(req,res)=>{
     if(!menu)
         return res.sned("조회를 원하는 menu를 입력해주세요");
     
-    const getReviewsRanksResult = await showMenuRank();
+    const getReviewsRanksResult = await showMenuRank(menu);
     return res.send(getReviewsRanksResult);
 
 }
+
