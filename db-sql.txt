@@ -1,0 +1,12 @@
+//db table info
+
+CREATE TABLE menu_review(
+    ID INT AUTO_INCREMENT not null,
+    menu varchar(10) not null,
+    menu_rank INT not null,
+    menu_description TEXT null,
+    created_time DATE DEFAULT (CURRENT_DATE),
+    userID varchar(100) null,
+    primary key (ID)
+);
+
