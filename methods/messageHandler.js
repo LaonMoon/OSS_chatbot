@@ -1,6 +1,13 @@
 const https = require('https')
 
 function create(event, texts) {
+    // Request header
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + 'n/FsngKwPgrLhglag8dqI994iPBAFGlWAZ049Hiq1F5tsguZbDxksyWj3zskC0TFsCOCGraTNp0yg7YLdTm+wOZeDuUKNuu/2Xvz9azWjqMyKy3t+68MjDEK50ytYmjcQFImAvBJ5hC1ZayLOqHcSwdB04t89/1O/w1cDnyilFU='
+    }
+    
+    // Request body
     let messages = []
     for (let text of texts) {
         const message = {
@@ -13,12 +20,6 @@ function create(event, texts) {
         replyToken: event.replyToken,
         messages: messages
     })
-
-    // Request header
-    const headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + 'n/FsngKwPgrLhglag8dqI994iPBAFGlWAZ049Hiq1F5tsguZbDxksyWj3zskC0TFsCOCGraTNp0yg7YLdTm+wOZeDuUKNuu/2Xvz9azWjqMyKy3t+68MjDEK50ytYmjcQFImAvBJ5hC1ZayLOqHcSwdB04t89/1O/w1cDnyilFU='
-    }
 
     // Options to pass into the request
     const webhookOptions = {
@@ -44,6 +45,7 @@ function create(event, texts) {
     return {request: request, dataString: dataString}
 }
 
+// Send request to client
 function send(request, dataString) {
     request.write(dataString)
     request.end()

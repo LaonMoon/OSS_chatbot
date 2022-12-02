@@ -76,4 +76,6 @@ class User {
     }
 }
 
+let user = User.load('userId')
+
 module.exports.User = User
