@@ -5,7 +5,7 @@ connection = mysql.createPool({
     user: 'root',
     password: 'Woals0313!',
     connectionLimit: 4,
-    database: 'samplebot'
+    database: 'chatbot'
 })
 
 // Return result object of sql

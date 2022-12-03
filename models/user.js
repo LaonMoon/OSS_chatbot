@@ -6,12 +6,15 @@ class User {
     #state = ""
     #alarmTime = 0
     #menuList = []
+
     // constructor
     constructor(userId) {
         this.userId = userId
         this.state = "following"
+        this.alarmTime = ""
         this.menuList = []
     }
+
     // getter
     get userId() {
         return this.#userId
@@ -19,9 +22,13 @@ class User {
     get state() {
         return this.#state
     }
+    get alarmTime() {
+        return this.#alarmTime
+    }
     get menuList() {
         return this.#menuList
     }
+
     // setter
     set userId(userId) {
         this.#userId = userId
@@ -29,9 +36,13 @@ class User {
     set state(state) {
         this.#state = state
     }
+    set alarmTime(alarmTime) {
+        this.#alarmTime = alarmTime
+    }
     set menuList(menuList) {
         this.#menuList = menuList
     }
+
     // methods
     AddMenuList(menu) {
         this.#menuList.push(menu)
@@ -56,6 +67,7 @@ class User {
         }
         catch (err) { throw err }
     }
+    
     // static
     static async load(userId) {
         try {
@@ -63,6 +75,7 @@ class User {
             let result = await db.Execute(sql)
             let user = new User(result[0]['userId'])
             user.#state = result[0]['state']
+            user.#alarmTime = result[0]['alarmTime']
             sql = `SELECT * FROM user_menulist where userId = '${userId}';`
             result = await db.Execute(sql)
             for (let idx in result) {
@@ -75,7 +88,5 @@ class User {
         }
     }
 }
-
-let user = User.load('userId')
 
 module.exports.User = User

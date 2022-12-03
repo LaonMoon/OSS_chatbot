@@ -2,26 +2,25 @@ const db = require('../methods/database')
 const axios = require('axios')
 
 class MenuData {
-    // private
+    //private
     #data
 
-    // constructor
+    //constructor
     constructor(data) {
         this.#data = data
     }
 
-    // getter
+    //getter
     get data() {
         return this.#data
     }
 
-    // setter
+    //setter
     set data(data) {
         this.#data = data
     }
 
-    // methods
-    // Save menudata in databse
+    //methods
     async save() {
 
         let rows = Object.values(this.#data)
@@ -45,18 +44,14 @@ class MenuData {
         }
     }
 
-    // static
-    // Return a menudata obeject loaded from database
+    //static
     static async load(date) {
-
         let sql = `SELECT * FROM menudata WHERE date = '${date}'`
         let result = await db.Execute(sql)
         let menudata = new MenuData(result)
         return menudata
     }
-    // Return menudata got from GET url
     static async GetMenuData() {
-
         const url = "https://dorm2.khu.ac.kr/food/getWeeklyMenu.kmc?locgbn=K1&sch_date=&fo_gbn=stu"
         let data = []
 
@@ -66,7 +61,6 @@ class MenuData {
         })
         return data
     }
-    // Return processed data
     static async ProcessData(raw) {
     
         let data = []
