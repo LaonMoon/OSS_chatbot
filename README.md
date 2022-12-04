@@ -134,17 +134,17 @@
     - 사용자가 지정한 시간이 되었을 경우 오늘의 메뉴에 대한 메세지를 보낸다. 시간대에 따라 점심 이전일 경우 점심과 저녁 메뉴 모두 보내주고, 저녁 시간일 경우 저녁 메뉴만 보내준다.
     - “**딩동! 오늘의 메뉴는 “눈꽃돈까스”입니다! 어서 가서 먹어볼까요?”**
     
-**##Getting Started ( Installation )**
+**## Getting Started ( Installation )**
 
-**##Usage**
+**## Usage**
 
 You can use demo chatbot at this page.
 
-**##Roadmap**
+**## Roadmap**
 
 - [ ] Add new feature
 
-**##Contributing**
+**## Contributing**
 
 @3un0ia
 @Baejjjjjjjj
@@ -153,7 +153,7 @@ You can use demo chatbot at this page.
 @jamm-king
 @LaonMoon
 
-**##License**
+**## License**
 
 Apache License 2.0
 
