@@ -29,10 +29,21 @@ async function saveMenuData() {
     await menudata.save()
 }
 
+async function saveUser(userId) {
+    let user = new User(userId)
+    await user.save()
+}
+
+async function saveReivew() {
+    
+}
+
 const userId = 'U3c5199b84bae262c48381504168fe4b2'
 printUser(userId)
 
 const date = '2022-12-01'
 printMenuData(date)
+
+saveUser('abcd')
 
 // saveMenuData()

@@ -1,11 +1,13 @@
 const line = require('@line/bot-sdk');
+const TOKEN = process.env.TOKEN || 'n/FsngKwPgrLhglag8dqI994iPBAFGlWAZ049Hiq1F5tsguZbDxksyWj3zskC0TFsCOCGraTNp0yg7YLdTm+wOZeDuUKNuu/2Xvz9azWjqMyKy3t+68MjDEK50ytYmjcQFImAvBJ5hC1ZayLOqHcSwdB04t89/1O/w1cDnyilFU='
+
 
 const client = new line.Client({
     channelAccessToken: TOKEN
 });
 
-const User = require('./models/user').User
-const MenuData = require('./models/menudata').MenuData
+const User = require('../models/user').User
+const MenuData = require('../models/menudata').MenuData
 
 var User_funcId_Arr = [];
 var User_Id_Arr = [];
