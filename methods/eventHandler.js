@@ -14,32 +14,52 @@ const label = {
 }
 Object.freeze(label)
 
-function handleEvent(event) {
+async function handleEvent(event) {
+    const userId = event.source.userId
+    let user
 
-    // FOLLOW EVENT
-    if (event.type === "follow") {
-        
+    if(await User.isIn(userId)) {
+        user = await User.load(userId)
     }
-    // UNFOLLOW EVENT
-    if (event.type === "unfollow") {
-
+    else {
+        user = new User(userId)
+        await user.save()
     }
-    // MESSAGE EVENT
-    if (event.type === "message") {
 
-        console.log(event.source.userId)
-        const message = event.message.text
+    if(user.state == "following") {
+        // FOLLOW EVENT
+        if (event.type === "follow") {
+            
+        }
+        // UNFOLLOW EVENT
+        if (event.type === "unfollow") {
 
-        // cases
-        switch(messageLabel(message)) {
-            case (label.HELP): {message_help(event); break;}
-            case (label.ABOUT): {break;}
-            case (label.MENU): {break;}
-            case (label.REVIEW): {break;}
-            case (label.TODAY): {break;}
-            case (label.MYMENU): {break;}
-            case (label.ALARM): {Alarm_Handler(eventObj); break;}
-            default: {break;}
+        }
+        // MESSAGE EVENT
+        if (event.type === "message") {
+            const message = event.message.text
+            // cases
+            switch(messageLabel(message)) {
+                case (label.HELP): {message_help(event); break;}
+                case (label.ABOUT): {break;}
+                case (label.MENU): {break;}
+                case (label.REVIEW): {break;}
+                case (label.TODAY): {break;}
+                case (label.MYMENU): {break;}
+                case (label.ALARM): {Alarm_Handler(eventObj); break;}
+                default: {break;}
+            }
+        }
+    }
+    else {
+        switch(user.state) {
+            case 'help_[a-Z]+': {message_help(event); break;}
+            case 'about_[a-Z]+': {break;}
+            case 'menu_[a-Z]+': {break;}
+            case 'review_[a-Z]+': {break;}
+            case 'today_[a-Z]+': {break;}
+            case 'mymenu_[a-Z]+': {break;}
+            case 'alarm_[a-Z]+': {Alarm_Handler; break;}
         }
     }
 }
@@ -55,7 +75,7 @@ function messageLabel(message) {
         ['알람 설정']
     ]
     let idx = 0
-    for(idx in table) {
+    for(idx = 0; idx < table.length; idx++) {
         if (table[idx].includes(message)) return idx
     }
     return -1
