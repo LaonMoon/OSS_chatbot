@@ -1,6 +1,7 @@
 const https = require('https')
 const message_help = require('./help').message_help
 const post_about = require('./about').post_about
+const Alarm_Handler = require('./alarmhandler').Alarm_Handler
 
 function handleEvent(event) {
     // FOLLOW EVENT
@@ -23,7 +24,7 @@ function handleEvent(event) {
             case ('리뷰 작성'): {break;}
             case ('오늘 학식 어때'): {break;}
             case ('메뉴 지정'): {break;}
-            case ('알람 설정'): {break;}
+            case ('알람 설정'): {Alarm_Handler(eventObj); break;}
         }
     }
 }
