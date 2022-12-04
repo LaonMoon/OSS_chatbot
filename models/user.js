@@ -56,18 +56,13 @@ class User {
             let sql = `SELECT userId FROM user where userId = '${this.userId}'`
             let result = await db.Execute(sql)
 
-            // 
-            if (result == []) {
+            if (result.length == 0) {
                 sql = `INSERT INTO user (userId, state) VALUES ('${this.userId}', '${this.state}');`
                 result = await db.Execute(sql)
             }
             else {
                 sql = `UPDATE user SET state = '${this.state}'`
-                sql = `SELECT * FROM user_menulist where userId = '${userId}';`
                 result = await db.Execute(sql)
-                for (let idx in result) {
-                    await user.AddMenuList(result[idx]['menu'])
-                }
             }
             return result
         }
@@ -83,6 +78,22 @@ class User {
     }
     
     // static
+    static async isIn(userId) {
+        try {
+            let sql = `SELECT userId FROM user where userId = '${this.userId}'`
+            let result = await db.Execute(sql)
+
+            if (result.length == 0) {
+                return false
+            }
+            else {
+                return true
+            }
+        }
+        catch(err) {
+            throw err
+        }
+    }
     static async load(userId) {
         try {
             let sql = `SELECT * FROM user where userId = '${userId}';`
