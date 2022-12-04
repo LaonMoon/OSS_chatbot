@@ -26,7 +26,7 @@ async function Execute(sql) {
 
 class User {
     // private
-    #userId = ""
+    #userId = "0"
     #state = ""
     #alarmTime = 0
     #menuList = []

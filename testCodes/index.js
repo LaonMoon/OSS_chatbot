@@ -29,6 +29,8 @@ const HTTPS = require('https');
 const domain = "2021105604.oss2022chatbot.tk"
 const sslport = 3000;
 
+let rankstate=1;
+let reviewstate = 1;
 
 app.get("/", (req, res) => {
   res.sendStatus(200)
@@ -49,6 +51,7 @@ function handleEvent(event) {
 
   }
   // MESSAGE EVENT
+
   if (event.type === "message") {
     const message = event.message.text
     // cases
@@ -58,7 +61,11 @@ function handleEvent(event) {
       case ('오늘 메뉴 알려줘' || '내일 메뉴 알려줘'
           || '이번 주 메뉴 알려줘'): {break;}
       case ('리뷰 작성'): {reply(event); break;}
-      case ('오늘 학식 어때'): {break;}
+      case ('오늘 학식 어때'): {showrank(event);break;}
+      case ('소반'||'특식'||'석식'):{
+        if(rankstate=2){showrank2(event);
+        else if(reviewstate=2)reply2(event);break;}
+      }
       case ('메뉴 지정'): {break;}
       case ('알람 설정'): {break;}
     }
@@ -72,7 +79,40 @@ app.post("/webhook", function(req, res) {
 
 })
 
+function showrank(event){
+  const client = new line.Client({
+    channelAccessToken: TOKEN
+  });
 
+  const rpT = event.replyToken;
+
+  const showrankmsg = {"type": "text", "text": "학식 리뷰를 보여드리겠습니다.\n먼저, menu의 종류를 입력해주세요(소반,특식,석식)"};
+
+  client.replyMessage(rpT, showrankmsg);
+
+
+  const sucess='1';
+  rankstate=2;
+  return sucess;
+}
+
+const showrank2=async(event)=>{
+  const client = new line.Client({
+    channelAccessToken: TOKEN
+  });
+  const rpT = event.replyToken;
+  const menu= event.message.text;
+  console.log(menu);
+  const reviewdata = await getReviewsRanks(menu);
+  console.log(reviewdata);
+  const dataString = JSON.stringify(reviewdata);
+  console.log(dataString);
+  const showrank2msg = {"type": "text", "text": `학식 리뷰를 보여드리겠습니다.\n'${dataString}'`};
+  console.log(showrank2msg)
+  rankstate=1;
+  client.replyMessage(rpT,showrank2msg);
+
+}
 
 async function makeUser(userId){
   let user = User.load(userId);
@@ -88,63 +128,85 @@ async function loadUser(userId){
 
 }
 
+const client = new line.Client({
+  channelAccessToken: TOKEN
+});
+
+
+const secondmsg = {"type": "text", "text": "입력해주셔서 감사합니다.\n다음으로, menu의 별점를 0부터5까지 정수형으로 입력하세요"}
+const thirdmsg = {"type": "text", "text": "입력해주셔서 감사합니다. \nmenu에 대한 text후기를 남기시겠습니까?(yes or no)"}
+const fourthmsg = {"type": "text", "text": "text후기를 남겨주세요"}
+const fifthmsg = {"type": "text", "text": "학식 리뷰를 입력해주셔서 감사합니다."}
+
+
+
 function reply(event) {
-  const userId = event.source.userId;
-  let user = User.load(userId);
+  //const userId = event.source.userId;
+  //let user = User.load(userId);
+  //console.log(user.state);
   //console.log(user);
-  //while (user.state != '6') {
-    const client = new line.Client({
-      channelAccessToken: TOKEN
-    });
+  const rpT = event.replyToken;
+  const firstmsg = {"type": "text", "text": "학식 리뷰를 입력해주세요.\n먼저, menu의 종류를 입력해주세요(소반,특식,석식)"}
+  client.replyMessage(rpT, firstmsg);
+  let reviewstate = 2;
+}
+function reply2(event) {
 
-    if(user.state=''){
-      makeUser(userId);
-      user.state='1';
-      reply(event);
+  const menu2= event.message.text;
+  const rpT = event.replyToken;
+  const secondmsg = {"type": "text", "text": "입력해주셔서 감사합니다.\n다음으로, menu의 별점를 0부터5까지 정수형으로 입력하세요"}
+  client.replyMessage(rpT, secondmsg);
+  let reviewstate = 3;
+  }
+
+
+ /* while(i!=7){
+    var i=1;
+    if (i==0) {
+      makeUser(userId)
+     // i=1;
     }
 
-    const firstmsg = {"type": "text", "text": "학식 리뷰를 입력해주세요.\n먼저, menu의 종류를 입력해주세요(소반,특식,석식)"}
-    const secondmsg = {"type": "text", "text": "입력해주셔서 감사합니다.\n다음으로, menu의 별점를 0부터5까지 정수형으로 입력하세요"}
-    const thirdmsg = {"type": "text", "text": "입력해주셔서 감사합니다. \nmenu에 대한 text후기를 남기시겠습니까?(yes or no)"}
-    const fourthmsg = {"type": "text", "text": "text후기를 남겨주세요"}
-    const fifthmsg = {"type": "text", "text": "학식 리뷰를 입력해주셔서 감사합니다."}
-    const rpT = event.replyToken;
 
-    if (user.state = '1') {
-      client.replyMessage(rpT, firstmsg);
-      user.state = '2';
+    if (i==1) {
+
+      //i=2;
+      //console.log(i);
     }
 
-    if (user.state = '2') {
+    else if (i ==2) {
       const menu = event.message.text;
       client.replyMessage(rpT, secondmsg);
-      user.state = '3';
+      //i= 3;
     }
 
-    if (user.state = '3') {
+    else if (i == 3) {
       const menu_rank = event.message.text;
       client.replyMessage(rpT, thirdmsg);
-      user.state = '4';
+      i = 4;
     }
 
-    if (user.stae = '4') {
+    else if (i == 4) {
       if (event.message.text = "yes") {
-        user.state = '5';
+        user.state = 5;
       } else {
         const menu_description = "";
-        user.state = '6';
+        i = 6;
       }
     }
 
-    if (user.state = '5') {
+    else if (i == 5) {
       const menu_description = event.message.text;
       client.replyMessage(rpT, fourthmsg);
-      user.state = '6';
+      i = 6;
     }
-    if (user.state = '6') {
+    else if (i == 6) {
       client.replyMessage(rpT, fifthmsg);
+      postReviews(menu,menu_rank,menu_description);
+      i= 7;
     }
   }
+}*/
 
 
 /*

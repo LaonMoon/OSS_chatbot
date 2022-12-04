@@ -2,7 +2,8 @@
 export const selectmenurank = async(connection,menu)=>{
 
     const selectmenurankQuery = `select sum(menu_rank)/count(ID) FROM menu_review WHERE DATE(created_time)=DATE(NOW()) AND menu=?`;
-    const menurankRows = await connection.query(selectmenurankQuery,menu);
+    const [menurankRows] = await connection.query(selectmenurankQuery,menu);
+    console.log(menurankRows);
     return menurankRows;
 }
 
@@ -26,12 +27,17 @@ export const selectUser = async (connection) =>{
     return userRows;
 }
 
+/*export const insertUser = async (connection) =>{
+    const selectUserListQuery = `INSERT ;`
+    const [userRows] = await connection.query(selectUserListQuery);
+    return userRows;
+}*/
 
 //review insert 
 export const insertreview = async(connection, insertreviewParams)=>{
     try{
     
-    const insertreviewQuery = `INSERT menu_review(menu,menu_rank,menu_description,userID) values(?,?,?,?);`;
+    const insertreviewQuery = `INSERT menu_review(menu,menu_rank,menu_description,userID) values(?,?,?);`;
     const insertreviewRow = await connection.query(insertreviewQuery,insertreviewParams)
     
     return insertreviewRow;

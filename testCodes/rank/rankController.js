@@ -6,9 +6,7 @@ import {createreview,showReview,showMenuRank} from "./rankService"
  * [POST] /reviews/
  */
 
-export const postReviews = async(req,res)=>{
-
-    const {menu,menu_rank,menu_description,userID}=req.body;
+export const postReviews=async(menu,menu_rank,menu_description)=>{
 
     if(!menu)
         return res.send("menu의 종류를 입력하세요(중식1(소반),중식2(특식),석식)");
@@ -27,7 +25,7 @@ export const postReviews = async(req,res)=>{
 
     if(!menu_description)
         return res.send("후기는 어떤가요?");
-    const postReviewResponse = await createreview(menu,menu_rank,menu_description,userID);
+    const postReviewResponse = await createreview(menu,menu_rank,menu_description);
     if(postReviewResponse)
         return res.send("리뷰 입력이 완료되었습니다. 이용해주셔서 감사합니다:)");
     /*
@@ -43,15 +41,15 @@ export const postReviews = async(req,res)=>{
  * [GET]] /reviews/
  */
 
-export const getReviewsRanks=async(req,res)=>{
+export const getReviewsRanks=async(menu)=>{
 
-    const {query:{menu}} =req;
 
-    if(!menu)
-        return res.sned("조회를 원하는 menu를 입력해주세요");
+   // if(!menu)
+    // return res.send("조회를 원하는 menu를 입력해주세요");
     
-    const getReviewsRanksResult = await showMenuRank(menu);
-    return res.send(getReviewsRanksResult);
+    const getReviewsRanksResult = await (showMenuRank(menu));
+    console.log(getReviewsRanksResult);
+    return (getReviewsRanksResult);
 
 }
 
