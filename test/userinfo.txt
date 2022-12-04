@@ -1,0 +1,10 @@
+CREATE TABLE UserInfo
+(
+	ID INT AUTO_INCREMENT not null,
+	email varchar(50) not null,
+	password varchar(300) not null,
+	nickname varchar(20) not null,
+	phoneNumber varchar(30) null,
+	status varchar(10) null,
+	primary key (ID)
+);
