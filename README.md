@@ -1,7 +1,9 @@
 # OSS_chatbot
+## About the project
 
 **“안녕하세요, 경희대학교 제2기숙사 학식 알리미 챗봇입니다. 무엇을 도와드릴까요?”**
 
+**"Hello, This is the 2nd dormitory cafeteria menu notification chatbot at Kyunghee University. How can I help you?"**
 
 - **기본적인 대화**
 - **[help]**
@@ -131,3 +133,31 @@
 - (★ 이후 실행) → 정해진 시간에 메뉴 알림
     - 사용자가 지정한 시간이 되었을 경우 오늘의 메뉴에 대한 메세지를 보낸다. 시간대에 따라 점심 이전일 경우 점심과 저녁 메뉴 모두 보내주고, 저녁 시간일 경우 저녁 메뉴만 보내준다.
     - “**딩동! 오늘의 메뉴는 “눈꽃돈까스”입니다! 어서 가서 먹어볼까요?”**
+    
+**##Getting Started ( Installation )**
+
+**##Usage**
+
+You can use demo chatbot at this page.
+
+**##Roadmap**
+
+- [ ] Add new feature
+
+**##Contributing**
+
+@3un0ia
+@Baejjjjjjjj
+@HeySueng
+@InseopSeo
+@jamm-king
+@LaonMoon
+
+**##License**
+
+Apache License 2.0
+
+**##Contact**
+
+laonm@khu.ac.kr
+
