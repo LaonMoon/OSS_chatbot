@@ -8,12 +8,10 @@ import {createreview,showReview,showMenuRank} from "./rankService"
 
 export const postReviews=async(menu,menu_rank,menu_description)=>{
 
-    await createreview(menu,menu_rank,menu_description);
-
-    /*if(!menu)
+    if(!menu)
         return res.send("menu의 종류를 입력하세요(중식1(소반),중식2(특식),석식)");
 
-    if(!(menu=="소반"||menu=="특식"||menu=="석식"))
+    if(!(menu=="중식1"||menu=="중식2"||menu=="석식"))
         return res.send("중식1,중식2,석식 중에 다시 입력하시오");
     
     if(!menu_rank)
@@ -26,11 +24,10 @@ export const postReviews=async(menu,menu_rank,menu_description)=>{
         return res.send("menu의 점수는 정수형으로 입력해주세요");
 
     if(!menu_description)
-        return res.send("후기는 어떤가요?");*/
-
-    if(createreview){
-        console.log("입력완료")
-    }
+        return res.send("후기는 어떤가요?");
+    const postReviewResponse = await createreview(menu,menu_rank,menu_description);
+    if(postReviewResponse)
+        return res.send("리뷰 입력이 완료되었습니다. 이용해주셔서 감사합니다:)");
     /*
     if(!userID)
         return res.send("userid입력오류");
@@ -51,14 +48,8 @@ export const getReviewsRanks=async(menu)=>{
     // return res.send("조회를 원하는 menu를 입력해주세요");
     
     const getReviewsRanksResult = await (showMenuRank(menu));
+    console.log(getReviewsRanksResult);
     return (getReviewsRanksResult);
 
 }
 
-export const getReviewsRanksDescription=async(menu2)=>{
-    const menu = menu2;
-
-    const getReviewsRanksResult = await (showReview(menu));
-    return (getReviewsRanksResult);
-
-}

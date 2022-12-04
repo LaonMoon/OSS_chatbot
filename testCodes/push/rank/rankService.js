@@ -1,4 +1,4 @@
-import { insertreview,selectReview,selectmenurank,selectmenurankdescription } from "./rankDao";
+import { insertreview,selectReview,selectmenurank } from "./rankDao";
 import pool from "../config/database";
 
 export const createreview = async(menu,menu_rank,menu_description,)=>{
@@ -22,10 +22,10 @@ try{
 
 }
 
-export const showReview= async(menu)=>{
+export const showReview= async()=>{
     const conn = await pool.getConnection(async(conn)=>conn);
 
-    const selectRankResult = await selectmenurankdescription(conn,menu);
+    const selectRankResult = await selectReview(conn);
     conn.release;
     return selectRankResult;
 }
