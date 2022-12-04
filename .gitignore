@@ -1,1 +1,9 @@
+<<<<<<< HEAD
+#dotenv enviroment variable files
+.env
+
+#node_modules
+/testCodes/node_modules/
+=======
 node_module/
+>>>>>>> fa239c1166d355d28c3e2d66eaf927ccd6942113
