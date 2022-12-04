@@ -73,10 +73,10 @@ function timerFunc(dateTime, user){
     }
 }
 
-function Alarm_Handler (eventObj) {
+async function Alarm_Handler (eventObj) {
     let InputUserId = eventObj.source.userId;
     let repTok = eventObj.replyToken;
-    let user = User.load('userid');
+    let user = await User.load(InputUserId);
     if (user.state == "following"){
         // 알람 설정 UI reply
         let Repmsg  = "입력 형식을 지정해주세요.\n 1) 오전 @시 2) 오후 @시 3) 사용자 입력 ex) 00:00"

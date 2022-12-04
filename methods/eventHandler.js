@@ -1,5 +1,5 @@
 const https = require('https')
-const User = require('../models/user')
+const User = require('../models/user').User
 const message_help = require('./help').message_help
 const Alarm_Handler = require('./alarmhandler').Alarm_Handler
 
@@ -46,7 +46,7 @@ async function handleEvent(event) {
                 case (label.REVIEW): {break;}
                 case (label.TODAY): {break;}
                 case (label.MYMENU): {break;}
-                case (label.ALARM): {Alarm_Handler(eventObj); break;}
+                case (label.ALARM): {Alarm_Handler(event); break;}
                 default: {break;}
             }
         }
@@ -59,7 +59,7 @@ async function handleEvent(event) {
             case 'review_[a-Z]+': {break;}
             case 'today_[a-Z]+': {break;}
             case 'mymenu_[a-Z]+': {break;}
-            case 'alarm_[a-Z]+': {Alarm_Handler; break;}
+            case 'alarm_[a-Z]+': {Alarm_Handler(event); break;}
         }
     }
 }

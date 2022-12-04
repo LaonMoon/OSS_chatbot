@@ -104,7 +104,7 @@ class User {
             sql = `SELECT * FROM user_menulist where userId = '${userId}';`
             result = await db.Execute(sql)
             for (let idx in result) {
-                await user.AddMenuList(result[idx]['menu'])
+                user.AddMenuList(result[idx]['menu'])
             }
             return user
         }
