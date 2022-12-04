@@ -1,5 +1,6 @@
 const https = require('https')
 const message_help = require('./help').message_help
+const post_about = require('./about').post_about
 
 function handleEvent(event) {
     // FOLLOW EVENT
@@ -16,7 +17,7 @@ function handleEvent(event) {
         // cases
         switch(message) {
             case ('help'  || '도움말' || '명령어'): {message_help(event); break;}
-            case ('about' || '서비스 소개'): {break;}
+            case ('about' || '서비스 소개'): {post_about(eventObj.replyToken, eventObj); break;}
             case ('오늘 메뉴 알려줘' || '내일 메뉴 알려줘'
                     || '이번 주 메뉴 알려줘'): {break;}
             case ('리뷰 작성'): {break;}
