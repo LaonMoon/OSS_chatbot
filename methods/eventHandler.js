@@ -26,6 +26,8 @@ function handleEvent(event) {
     }
     // MESSAGE EVENT
     if (event.type === "message") {
+
+        console.log(event.source.userId)
         const message = event.message.text
 
         // cases
