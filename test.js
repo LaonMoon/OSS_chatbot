@@ -7,6 +7,7 @@ async function printUser(userId) {
     console.log("userId : " + user.userId)
     console.log("state : " + user.state)
     console.log("menuList : " + user.menuList)
+    console.log("buffer : " + user.buffer)
     console.log("----------------------------------------------------------------------------------------")
 }
 
