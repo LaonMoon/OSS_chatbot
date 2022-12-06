@@ -11,14 +11,16 @@ async function printUser(userId) {
 }
 
 // Example for menudata class
-async function printMenuData(date) {
-    let menudata = await MenuData.load(date)
-    console.log("date : " + menudata.data[0].date)
-    console.log("lunch_A : " + menudata.data[0].lunch_A)
-    console.log("lunch_B : " + menudata.data[0].lunch_B)
-    console.log("dinner : " + menudata.data[0].dinner)
-    console.log("----------------------------------------------------------------------------------------")
+async function printMenuData(dates) {
+    const menudata = await MenuData.load(dates)
+    for(let data of menudata.data) {
+        console.log("date : " + data.date)
+        console.log("lunch_A : " + data.lunch_A)
+        console.log("lunch_B : " + data.lunch_B)
+        console.log("dinner : " + data.dinner)
+        console.log("----------------------------------------------------------------------------------------")
 
+    }
 }
 async function saveMenuData() {
     const raw = await MenuData.GetMenuData()
@@ -29,10 +31,21 @@ async function saveMenuData() {
     await menudata.save()
 }
 
+async function saveUser(userId) {
+    let user = new User(userId)
+    await user.save()
+}
+
+async function saveReivew() {
+    
+}
+
 const userId = 'U3c5199b84bae262c48381504168fe4b2'
 printUser(userId)
 
-const date = '2022-12-01'
-printMenuData(date)
+const dates = ['2022-12-06', '2022-12-07']
+printMenuData(dates)
+
+//saveUser('abcd')
 
 // saveMenuData()

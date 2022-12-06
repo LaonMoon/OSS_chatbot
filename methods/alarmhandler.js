@@ -1,11 +1,13 @@
 const line = require('@line/bot-sdk');
+const TOKEN = process.env.TOKEN || 'n/FsngKwPgrLhglag8dqI994iPBAFGlWAZ049Hiq1F5tsguZbDxksyWj3zskC0TFsCOCGraTNp0yg7YLdTm+wOZeDuUKNuu/2Xvz9azWjqMyKy3t+68MjDEK50ytYmjcQFImAvBJ5hC1ZayLOqHcSwdB04t89/1O/w1cDnyilFU='
+
 
 const client = new line.Client({
     channelAccessToken: TOKEN
 });
 
-const User = require('./models/user').User
-const MenuData = require('./models/menudata').MenuData
+const User = require('../models/user').User
+const MenuData = require('../models/menudata').MenuData
 
 var User_funcId_Arr = [];
 var User_Id_Arr = [];
@@ -71,10 +73,10 @@ function timerFunc(dateTime, user){
     }
 }
 
-function Alarm_Handler (eventObj) {
+async function Alarm_Handler (eventObj) {
     let InputUserId = eventObj.source.userId;
     let repTok = eventObj.replyToken;
-    let user = User.load('userid');
+    let user = await User.load(InputUserId);
     if (user.state == "following"){
         // 알람 설정 UI reply
         let Repmsg  = "입력 형식을 지정해주세요.\n 1) 오전 @시 2) 오후 @시 3) 사용자 입력 ex) 00:00"
