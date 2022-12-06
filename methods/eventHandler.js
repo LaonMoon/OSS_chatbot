@@ -19,14 +19,18 @@ Object.freeze(label)
 async function handleEvent(event) {
     const userId = event.source.userId
     let user
+    //console.log(userId)
 
     if(await User.isIn(userId)) {
         user = await User.load(userId)
+        //console.log('Existing user')
     }
     else {
         user = new User(userId)
         await user.save()
+        //console.log('New user')
     }
+    //console.log(user.state)
 
     if(user.state == "following") {
         // FOLLOW EVENT
@@ -42,26 +46,26 @@ async function handleEvent(event) {
             const message = event.message.text
             // cases
             switch(messageLabel(message)) {
-                case (label.HELP): {message_help(event); break;}
+                case (label.HELP): {await message_help(event); break;}
                 case (label.ABOUT): {break;}
-                case (label.MENU): {menu_dialogue(event); break;}
+                case (label.MENU): {await menu_dialogue(event); break;}
                 case (label.REVIEW): {break;}
                 case (label.TODAY): {break;}
-                case (label.MYMENU): {mymenu_dialogue(event); break;}
-                case (label.ALARM): {Alarm_Handler(event); break;}
+                case (label.MYMENU): {await mymenu_dialogue(event); break;}
+                case (label.ALARM): {await Alarm_Handler(event); break;}
                 default: {break;}
             }
         }
     }
     else {
-        switch(user.state) {
-            case label.HELP: {message_help(event); break;}
+        switch(checkState(user)) {
+            case label.HELP: {await message_help(event); break;}
             case label.ABOUT: {break;}
-            case label.MENU: {menu_dialogue(event); break;}
+            case label.MENU: {await menu_dialogue(event); break;}
             case label.REVIEW: {break;}
             case label.TODAY: {break;}
-            case label.MYMENU: {break;}
-            case label.ALARM: {Alarm_Handler(event); break;}
+            case label.MYMENU: {await mymenu_dialogue(event); break;}
+            case label.ALARM: {await Alarm_Handler(event); break;}
             default: {break;}
         }
     }
@@ -92,19 +96,19 @@ function checkState(user) {
     try {
         const state = user.state
         let filters = [
-            /help/,
-            /about/,
-            /menu/,
-            /review/,
-            /today/,
-            /mymenu/,
-            /alarm/
+            /^help/,
+            /^about/,
+            /^menu/,
+            /^review/,
+            /^today/,
+            /^mymenu/,
+            /^alarm/
         ]
         let idx = 0
-        for(idx = 0; idx < table.length; idx++) {
+        for(idx = 0; idx < filters.length; idx++) {
             if (filters[idx].test(state)) return idx
         }
-    return -1
+        return -1
     }
     catch(err) {
         throw err
