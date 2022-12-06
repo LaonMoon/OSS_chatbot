@@ -13,24 +13,22 @@ Object.freeze(day_menu)
 Object.freeze(label_menu)
 
 async function menu_dialogue(event) {
-    try {
+    try 
+    {
         const when = messageLabel_menu(event.message)
         const dates = getDates(when)
-        const data = await MenuData.load(dates).data
+        const menudata = await MenuData.load(dates)
+        const data = menudata.data
         replyToken = event.replyToken
-        const messages = createMessage(data)
-        const client = new Client({
-            channelAccessToken: TOKEN
-        })
-        client.replyMessage(replyToken, messages)
+        createAndSendMessage(event, data)
     }
     catch(err) {
         throw err
     }
 }
 function messageLabel_menu(message) {
-    const table = ['오늘', '내일', '이번주']
-    const when = message.text.slice(0, 2)
+    const table = ['오늘 ', '내일 ', '이번주']
+    const when = message.text.slice(0, 3)
     let idx = 0
     for(idx = 0; idx < table.length; idx++) {
         if (when == table[idx]) return idx
@@ -38,62 +36,70 @@ function messageLabel_menu(message) {
     return -1
 }
 function getDates(when) {
+    try {
     switch(when) {
-        case label_menu.TODAY: {
-            const today = new Date()
-            const year = today.getFullYear()
-            const month = ('0' + (today.getMonth() + 1)).slice(-2)
-            const date = ('0' + today.getDate()).slice(-2)
-            const dateToday = String(year + '-' + month  + '-' + date)
-            return [dateToday]
-        }
-        case label_menu.TOMMOROW: {
-            const today = new Date()
-            const year = today.getFullYear()
-            const month = ('0' + (today.getMonth() + 1)).slice(-2)
-            const date = ('0' + today.getDate() + 1).slice(-2)
-            const dateToday = String(year + '-' + month  + '-' + date)
-            return [dateToday]
-        }
-        case label_menu.THISWEEK: {
-            const today = new Date();  
-            const year_today = currentDay.getFullYear();
-            const month_today = currentDay.getMonth() + 1;
-            const date_today  = currentDay.getDate();
-            const day_today = currentDay.getDay();
-
-            let thisWeek = [];
-            for(var i=0; i<7; i++) {
-                const monday = new Date(year_today, month_today, date_today + (i - day_today));
-                let yyyy = monday.getFullYear()
-                let mm = ('0' + monday.getMonth()).slice(-2)
-                let dd = ('0' + monday.getDate()).slice(-2)
-                thisWeek.push = yyyy + '-' + mm + '-' + dd
+            case label_menu.TODAY: {
+                const today = new Date()
+                const year = today.getFullYear()
+                const month = ('0' + (today.getMonth() + 1)).slice(-2)
+                const date = ('0' + today.getDate()).slice(-2)
+                const dateToday = String(year + '-' + month  + '-' + date)
+                return [dateToday]
             }
-            return thisWeek
+            case label_menu.TOMMOROW: {
+                const today = new Date()
+                const year = today.getFullYear()
+                const month = ('0' + (today.getMonth() + 1)).slice(-2)
+                const date = ('0' + (today.getDate() + 1)).slice(-2)
+                const dateToday = String(year + '-' + month  + '-' + date)
+                return [dateToday]
+            }
+            case label_menu.THISWEEK: {
+                const today = new Date();  
+                const year_today = today.getFullYear();
+                const month_today = today.getMonth();
+                const date_today  = today.getDate();
+                const day_today = today.getDay();
+
+                let thisWeek = [];
+                for(let idx = 0; idx < 5; idx++) {
+                    const monday = new Date(year_today, month_today, date_today + (idx - day_today));
+                    let yyyy = monday.getFullYear()
+                    let mm = ('0' + (monday.getMonth() + 1)).slice(-2)
+                    let dd = ('0' + (monday.getDate() + 1)).slice(-2)
+                    const day = yyyy + '-' + mm + '-' + dd
+                    thisWeek.push(day)
+                }
+                return thisWeek
+            }
         }
     }
+    catch(err) {
+        throw err
+    }
 }
-function createMessage(data) {
+async function createAndSendMessage(event, data) {
     try {
-        const messages = []
+        const userId = event.source.userId
+        const client = new Client({
+            channelAccessToken: TOKEN
+        })
         console.log(data)
         if(data.length == 1) {
-            const text_day = day_menu[0]
-            const text_lunch_A = `\n\n[점심 메뉴]\n${data[0].lunch_A}\n${data[0].lunch_B}\n`
+            const text_lunch_A = `[점심 메뉴]\n${data[0].lunch_A}\n`
             const text_lunch_B = `${data[0].lunch_B}\n`
             const text_dinner = `[저녁 메뉴]\n${data[0].dinner}`
-            const text = text_day + text_lunch_A + text_lunch_B + text_dinner
+            const text = text_lunch_A + text_lunch_B + text_dinner
             const message = {
                 type: "text",
                 text: text
             }
-            messages.push(message)
+            await client.pushMessage(userId, message)
         }
         else {
-            for(let idx = 0; i < data.length; i++) {
+            for(let idx = 0; idx < data.length; idx++) {
                 const text_day = day_menu[idx]
-                const text_lunch_A = `\n\n[점심 메뉴]\n${data[idx].lunch_A}\n${data[idx].lunch_B}\n`
+                const text_lunch_A = `\n\n[점심 메뉴]\n${data[idx].lunch_A}\n`
                 const text_lunch_B = `${data[idx].lunch_B}\n`
                 const text_dinner = `[저녁 메뉴]\n${data[idx].dinner}`
                 const text = text_day + text_lunch_A + text_lunch_B + text_dinner
@@ -101,10 +107,10 @@ function createMessage(data) {
                     type: "text",
                     text: text
                 }
-                messages.push(message)
+                await client.pushMessage(userId, message)
             }
         }
-        return messages
+        //return messages
     }
     catch(err) {
         throw err
