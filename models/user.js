@@ -75,12 +75,12 @@ class User {
 
             // If there's no user matching this object's userId in database, then insert a new record.
             if (result.length == 0) {
-                sql = `INSERT INTO user (userId, state) VALUES ('${this.userId}', '${this.state}');`
+                sql = `INSERT INTO user (userId, state, buffer, alarmTime) VALUES ('${this.userId}', '${this.state}', '${this.buffer}', '${this.alarmTime}');`
                 result = await db.Execute(sql)
             }
             // If there's already an user matching this object's userId in database, update the record.
             else {
-                sql = `UPDATE user SET state = '${this.state}'`
+                sql = `UPDATE user SET state = '${this.state}' where userId = '${this.userId}'`
                 result = await db.Execute(sql)
             }
             return result
@@ -89,7 +89,7 @@ class User {
     }
     async delete() {
         try {
-            const sql = `DROP FROM user WHERE userId = '${this.userId}'`
+            const sql = `DELETE FROM user WHERE userId = '${this.userId}'`
             const result = await db.Execute(sql)
             return result
         }
