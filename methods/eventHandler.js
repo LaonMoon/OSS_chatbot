@@ -19,18 +19,19 @@ Object.freeze(label)
 async function handleEvent(event) {
     const userId = event.source.userId
     let user
-    //console.log(userId)
 
     if(await User.isIn(userId)) {
         user = await User.load(userId)
-        //console.log('Existing user')
     }
     else {
         user = new User(userId)
         await user.save()
-        //console.log('New user')
     }
-    //console.log(user.state)
+    console.log(user.userId)
+    console.log(user.state)
+    console.log(user.buffer)
+    console.log(user.alarmTime)
+    console.log(user.menuList)
 
     if(user.state == "following") {
         // FOLLOW EVENT

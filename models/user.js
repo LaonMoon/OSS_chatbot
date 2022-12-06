@@ -72,6 +72,7 @@ class User {
         try {
             let sql = `SELECT userId FROM user where userId = '${this.userId}'`
             let result = await db.Execute(sql)
+            console.log('result.length: ' + result.length)
 
             // If there's no user matching this object's userId in database, then insert a new record.
             if (result.length == 0) {
@@ -80,7 +81,7 @@ class User {
             }
             // If there's already an user matching this object's userId in database, update the record.
             else {
-                sql = `UPDATE user SET state = '${this.state}' where userId = '${this.userId}'`
+                sql = `UPDATE user SET state = '${this.state}', buffer = '${this.buffer}', alarmTime = '${this.alarmTime}' where userId = '${this.userId}'`
                 result = await db.Execute(sql)
             }
             return result
@@ -102,7 +103,7 @@ class User {
             Returns if there is any user matching userId in database.(true/false)
         */
         try {
-            let sql = `SELECT userId FROM user where userId = '${this.userId}'`
+            let sql = `SELECT * FROM user where userId = '${userId}'`
             let result = await db.Execute(sql)
 
             if (result.length == 0) {

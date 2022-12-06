@@ -70,7 +70,7 @@ async function mymenu_confirm(event, user) {
         text: text
     }
     const replyToken = event.replyToken
-    await user.AddMenuList(user.buffer)
+    await user.AddMenu(user.buffer)
     user.buffer = '\0'
     user.state = 'following'
     await user.save()
