@@ -2,6 +2,7 @@ const https = require('https')
 const User = require('../models/user').User
 const message_help = require('./help').message_help
 const menu_dialogue = require('./menu').menu_dialogue
+const mymenu_dialogue = require('./mymenu').mymenu_dialogue
 const Alarm_Handler = require('./alarmhandler').Alarm_Handler
 
 const label = {
@@ -46,7 +47,7 @@ async function handleEvent(event) {
                 case (label.MENU): {menu_dialogue(event); break;}
                 case (label.REVIEW): {break;}
                 case (label.TODAY): {break;}
-                case (label.MYMENU): {break;}
+                case (label.MYMENU): {mymenu_dialogue(event); break;}
                 case (label.ALARM): {Alarm_Handler(event); break;}
                 default: {break;}
             }
@@ -66,7 +67,7 @@ async function handleEvent(event) {
 }
 
 function messageLabel(message) {
-    let table = [
+    const table = [
         ['help', '도움말', '명령어'],
         ['about', '서비스 소개'],
         ['오늘 메뉴 알려줘', '내일 메뉴 알려줘', '이번주 메뉴 알려줘'],
