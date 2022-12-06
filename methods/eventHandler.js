@@ -41,45 +41,73 @@ async function handleEvent(event) {
             const message = event.message.text
             // cases
             switch(messageLabel(message)) {
-                case (label.HELP): {message_help(event); break;}
-                case (label.ABOUT): {break;}
-                case (label.MENU): {menu_dialogue(event); break;}
-                case (label.REVIEW): {break;}
-                case (label.TODAY): {break;}
-                case (label.MYMENU): {break;}
-                case (label.ALARM): {Alarm_Handler(event); break;}
+                case label.HELP: {message_help(event); break;}
+                case label.ABOUT: {break;}
+                case label.MENU: {menu_dialogue(event); break;}
+                case label.REVIEW: {break;}
+                case label.TODAY: {break;}
+                case label.MYMENU: {break;}
+                case label.ALARM: {Alarm_Handler(event); break;}
                 default: {break;}
             }
         }
     }
     else {
         switch(user.state) {
-            case 'help_[a-Z]+': {message_help(event); break;}
-            case 'about_[a-Z]+': {break;}
-            case 'menu_[a-Z]+': {menu_dialogue(event); break;}
-            case 'review_[a-Z]+': {break;}
-            case 'today_[a-Z]+': {break;}
-            case 'mymenu_[a-Z]+': {break;}
-            case 'alarm_[a-Z]+': {Alarm_Handler(event); break;}
+            case label.HELP: {message_help(event); break;}
+            case label.ABOUT: {break;}
+            case label.MENU: {menu_dialogue(event); break;}
+            case label.REVIEW: {break;}
+            case label.TODAY: {break;}
+            case label.MYMENU: {break;}
+            case label.ALARM: {Alarm_Handler(event); break;}
+            default: {break;}
         }
     }
 }
 
 function messageLabel(message) {
-    let table = [
-        ['help', '도움말', '명령어'],
-        ['about', '서비스 소개'],
-        ['오늘 메뉴 알려줘', '내일 메뉴 알려줘', '이번주 메뉴 알려줘'],
-        ['리뷰 작성'],
-        ['오늘 학식 어때'],
-        ['메뉴 지정'],
-        ['알람 설정']
-    ]
-    let idx = 0
-    for(idx = 0; idx < table.length; idx++) {
-        if (table[idx].includes(message)) return idx
+    try {
+        let table = [
+            ['help', '도움말', '명령어'],
+            ['about', '서비스 소개'],
+            ['오늘 메뉴 알려줘', '내일 메뉴 알려줘', '이번주 메뉴 알려줘'],
+            ['리뷰 작성'],
+            ['오늘 학식 어때'],
+            ['메뉴 지정'],
+            ['알람 설정']
+        ]
+        let idx = 0
+        for(idx = 0; idx < table.length; idx++) {
+            if (table[idx].includes(message)) return idx
+        }
+        return -1
     }
+    catch(err) {
+        throw err
+    }
+}
+function checkState(user) {
+    try {
+        const state = user.state
+        let filters = [
+            /help/,
+            /about/,
+            /menu/,
+            /review/,
+            /today/,
+            /mymenu/,
+            /alarm/
+        ]
+        let idx = 0
+        for(idx = 0; idx < table.length; idx++) {
+            if (filters[idx].test(state)) return idx
+        }
     return -1
+    }
+    catch(err) {
+        throw err
+    }
 }
 
 module.exports.handleEvent = handleEvent
