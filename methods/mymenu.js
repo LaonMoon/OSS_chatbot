@@ -24,7 +24,6 @@ async function mymenu_dialogue(event) {
 
 async function mymenu_following(event, user) {
     try {
-        console.log('mymenu_init - ' + user.state)
         const text = '원하시는 메뉴를 입력해주세요!(간단명료하게 음식을 지정할 수록 더 많은 추천을 받으실 수 있습니다. 눈꽃치즈돈까스(X) → 돈까스, 튀김카레라이스(X) → 카레)'
         const message = {
             type: "text",
@@ -41,7 +40,6 @@ async function mymenu_following(event, user) {
 }
 async function mymenu_checkConfirm(event, user) {
     try{
-        console.log('mymenu_checkConfirm - ' + user.state)
         const client_message = event.message
         const text = `“${client_message.text}” 좋아하는 메뉴로 지정하시겠습니까?\n1) 예, 2) 아니오`
         const message = {
