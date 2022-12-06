@@ -1,25 +1,20 @@
 const https = require('https')
 const fs = require('fs')
 const path = require('path')
+const dotenv = require('dotenv')
+dotenv.config()
 const express = require('express')
 const app = express()
-const line = require('@line/bot-sdk')
 const middleware = require('@line/bot-sdk').middleware
 const handleEvent = require('./methods/eventHandler').handleEvent
-
-const PORT = process.env.PORT || 23023
-const TOKEN = process.env.LINE_ACCESS_TOKEN || 'n/FsngKwPgrLhglag8dqI994iPBAFGlWAZ049Hiq1F5tsguZbDxksyWj3zskC0TFsCOCGraTNp0yg7YLdTm+wOZeDuUKNuu/2Xvz9azWjqMyKy3t+68MjDEK50ytYmjcQFImAvBJ5hC1ZayLOqHcSwdB04t89/1O/w1cDnyilFU='
-
-/* app.use(express.json())
-app.use(express.urlencoded({extended: true})) */
 
 app.get("/", (req, res) => {
     res.sendStatus(200)
 })
 
 const config = {
-    channelAcessToken: 'n/FsngKwPgrLhglag8dqI994iPBAFGlWAZ049Hiq1F5tsguZbDxksyWj3zskC0TFsCOCGraTNp0yg7YLdTm+wOZeDuUKNuu/2Xvz9azWjqMyKy3t+68MjDEK50ytYmjcQFImAvBJ5hC1ZayLOqHcSwdB04t89/1O/w1cDnyilFU=',
-    channelSecret: '3937dd366ad9ae26ec016a2abc831513'
+    channelAcessToken: process.env.TOKEN,
+    channelSecret: process.env.SECRET
 }
 
 app.post("/webhook", middleware(config), (req, res) => {

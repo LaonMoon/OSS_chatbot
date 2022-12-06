@@ -1,9 +1,7 @@
 const Client = require('@line/bot-sdk').Client
 const User = require('../models/user').User
-
-const TOKEN = process.env.TOKEN || 'n/FsngKwPgrLhglag8dqI994iPBAFGlWAZ049Hiq1F5tsguZbDxksyWj3zskC0TFsCOCGraTNp0yg7YLdTm+wOZeDuUKNuu/2Xvz9azWjqMyKy3t+68MjDEK50ytYmjcQFImAvBJ5hC1ZayLOqHcSwdB04t89/1O/w1cDnyilFU='
 const client = new Client({
-    channelAccessToken: TOKEN
+    channelAccessToken: process.env.TOKEN
 })
 
 async function mymenu_dialogue(event) {

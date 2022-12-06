@@ -72,7 +72,6 @@ class User {
         try {
             let sql = `SELECT userId FROM user where userId = '${this.userId}'`
             let result = await db.Execute(sql)
-            console.log('result.length: ' + result.length)
 
             // If there's no user matching this object's userId in database, then insert a new record.
             if (result.length == 0) {

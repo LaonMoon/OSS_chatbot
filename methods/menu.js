@@ -1,8 +1,8 @@
 const Client = require('@line/bot-sdk').Client
 const MenuData = require('../models/menudata').MenuData
-
-
-const TOKEN = process.env.TOKEN || 'n/FsngKwPgrLhglag8dqI994iPBAFGlWAZ049Hiq1F5tsguZbDxksyWj3zskC0TFsCOCGraTNp0yg7YLdTm+wOZeDuUKNuu/2Xvz9azWjqMyKy3t+68MjDEK50ytYmjcQFImAvBJ5hC1ZayLOqHcSwdB04t89/1O/w1cDnyilFU='
+const client = new Client({
+    channelAccessToken: process.env.TOKEN
+})
 const label_menu = {
     TODAY: 0,
     TOMMOROW: 1,
@@ -81,10 +81,6 @@ function getDates(when) {
 async function createAndSendMessage(event, data) {
     try {
         const userId = event.source.userId
-        const client = new Client({
-            channelAccessToken: TOKEN
-        })
-        console.log(data)
         if(data.length == 1) {
             const text_lunch_A = `[점심 메뉴]\n${data[0].lunch_A}\n`
             const text_lunch_B = `${data[0].lunch_B}\n`
@@ -110,7 +106,6 @@ async function createAndSendMessage(event, data) {
                 await client.pushMessage(userId, message)
             }
         }
-        //return messages
     }
     catch(err) {
         throw err
