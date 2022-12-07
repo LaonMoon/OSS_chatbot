@@ -38,19 +38,31 @@ async function mymenu_following(event, user) {
         throw err
     }
 }
+
+function getType(target) {
+    return Object.prototype.toString.call(target).slice(8, -1);
+}
+
 async function mymenu_checkConfirm(event, user) {
     try{
         const client_message = event.message
-        const text = `“${client_message.text}” 좋아하는 메뉴로 지정하시겠습니까?\n1) 예, 2) 아니오`
-        const message = {
-            type: "text",
-            text: text
+        // exception handling
+        if (getType(client_message)=! 'String'){
+            const errortext =  `“${client_message.text}”는 문자열이 아닙니다. 다시 입력해주세요.`
+            mymenu_following(event, user)
         }
-        const replyToken = event.replyToken
-        user.buffer = client_message.text
-        user.state = "mymenu_waitConfirm"
-        await user.save()
-        await client.replyMessage(replyToken, message)
+        else{
+            const text = `“${client_message.text}” 좋아하는 메뉴로 지정하시겠습니까?\n1) 예, 2) 아니오`
+            const message = {
+                type: "text",
+                text: text
+            }
+            const replyToken = event.replyToken
+            user.buffer = client_message.text
+            user.state = "mymenu_waitConfirm"
+            await user.save()
+            await client.replyMessage(replyToken, message)
+        }
     }
     catch(err) {
         throw err
