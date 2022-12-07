@@ -18,7 +18,7 @@ class User {
     constructor(userId) {
         this.#userId = userId
         this.#state = "following"
-        this.#alarmTime = ""
+        this.#alarmTime = 0
         this.#menuList = []
         this.#buffer = ""
     }
@@ -76,7 +76,7 @@ class User {
 
             // If there's no user matching this object's userId in database, then insert a new record.
             if (result.length == 0) {
-                sql = `INSERT INTO user (userId, state, buffer, alarmTime) VALUES ('${this.userId}', '${this.state}', '${this.buffer}', '${this.alarmTime}');`
+                sql = `INSERT INTO user (userId, state, buffer, alarmTime) VALUES ('${this.userId}', '${this.state}', '${this.buffer}', ${this.alarmTime});`
                 result = await db.Execute(sql)
             }
             // If there's already an user matching this object's userId in database, update the record.
