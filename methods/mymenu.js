@@ -48,8 +48,15 @@ async function mymenu_checkConfirm(event, user) {
         const client_message = event.message
         // exception handling
         if (getType(client_message)=! 'String'){
-            const errortext =  `“${client_message.text}”는 문자열이 아닙니다. 다시 입력해주세요.`
-            mymenu_following(event, user)
+            const text =  `“${client_message.text}”는 문자열이 아닙니다. 다시 입력해주세요.`
+            const message = {
+                type: "text",
+                text: text
+            }
+            const replyToken = event.replyToken
+            user.state = "mymenu_checkConfirm"
+            await user.save()
+            await mymenu_following(event, user)
         }
         else{
             const text = `“${client_message.text}” 좋아하는 메뉴로 지정하시겠습니까?\n1) 예, 2) 아니오`
@@ -73,6 +80,20 @@ async function mymenu_conclude(event, user) {
     switch(client_message.text) {
         case '1': {mymenu_confirm(event, user); break;}
         case '2': {mymenu_cancel(event, user); break;}
+        default : {
+            // Exception Handling
+            const text = `“1 또는 2를 입력해주세요.”`
+            const message = {
+                type: "text",
+                text: text
+            }
+            const replyToken = event.replyToken
+            user.buffer = '\0'
+            user.state = 'following'
+            await client.replyMessage(replyToken, message)
+            break;
+        }
+
     }
 }
 async function mymenu_conclude(event, user) {
