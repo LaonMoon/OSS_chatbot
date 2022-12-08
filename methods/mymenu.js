@@ -59,7 +59,7 @@ async function mymenu_conclude(event, user) {
     switch(client_message.text) {
         case '1': {mymenu_confirm(event, user); break;}
         case '2': {mymenu_cancel(event, user); break;}
-        //default: {mymenu_again(event, user); break;}
+        default: {mymenu_again(event, user); break;}
     }
 }
 
@@ -69,12 +69,7 @@ async function mymenu_again(event, user) {
         type: "text",
         text: text
     }
-    const replyToken = event.replyToken
-    user.buffer = null
-    user.state = 'following'
-    await user.save()
-    await client.replyMessage(replyToken, message)
-    mymenu_checkConfirm(event, user)
+    await client.pushMessage(user.userId, message)
 }
 
 

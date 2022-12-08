@@ -38,27 +38,33 @@ function getDates(when) {
     try {
     switch(when) {
             case label_menu.TODAY: {
-                const today = new Date()
-                const year = today.getFullYear()
-                const month = ('0' + (today.getMonth() + 1)).slice(-2)
-                const date = ('0' + today.getDate()).slice(-2)
+                const america = new Date()
+                const offset = 32400000
+                const korea = new Date(america.getTime()+offset)
+                const year = korea.getFullYear()
+                const month = ('0' + (korea.getMonth() + 1)).slice(-2)
+                const date = ('0' + korea.getDate()).slice(-2)
                 const dateToday = String(year + '-' + month  + '-' + date)
                 return [dateToday]
             }
             case label_menu.TOMMOROW: {
-                const today = new Date()
-                const year = today.getFullYear()
-                const month = ('0' + (today.getMonth() + 1)).slice(-2)
-                const date = ('0' + (today.getDate() + 1)).slice(-2)
+                const america = new Date()
+                const offset = 32400000
+                const korea = new Date(america.getTime()+offset)
+                const year = korea.getFullYear()
+                const month = ('0' + (korea.getMonth() + 1)).slice(-2)
+                const date = ('0' + (korea.getDate() + 1)).slice(-2)
                 const dateToday = String(year + '-' + month  + '-' + date)
                 return [dateToday]
             }
             case label_menu.THISWEEK: {
-                const today = new Date();  
-                const year_today = today.getFullYear();
-                const month_today = today.getMonth();
-                const date_today  = today.getDate();
-                const day_today = today.getDay();
+                const america = new Date()
+                const offset = 32400000
+                const korea = new Date(america.getTime()+offset)
+                const year_today = korea.getFullYear();
+                const month_today = korea.getMonth();
+                const date_today  = korea.getDate();
+                const day_today = korea.getDay();
 
                 let thisWeek = [];
                 for(let idx = 0; idx < 5; idx++) {
@@ -80,7 +86,15 @@ function getDates(when) {
 async function createAndSendMessage(event, data) {
     try {
         const userId = event.source.userId
-        if(data.length == 1) {
+        if(data.length == 0) {
+            const text = "메뉴 정보가 없습니다."
+            const message = {
+                type: "text",
+                text: text
+            }
+            await client.pushMessage(userId, message)
+        }
+        else if(data.length == 1) {
             const text_lunch_A = `[점심 메뉴]\n${data[0].lunch_A}\n`
             const text_lunch_B = `${data[0].lunch_B}\n`
             const text_dinner = `[저녁 메뉴]\n${data[0].dinner}`

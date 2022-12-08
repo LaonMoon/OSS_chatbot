@@ -31,11 +31,6 @@ async function handleEvent(event) {
         user = new User(userId)
         await user.save()
     }
-    console.log(user.userId)
-    console.log(user.state)
-    console.log(user.buffer)
-    console.log(user.alarmTime)
-    console.log(user.menuList)
 
     if(user.state == "following") {
         // FOLLOW EVENT

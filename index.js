@@ -7,6 +7,7 @@ const express = require('express')
 const app = express()
 const middleware = require('@line/bot-sdk').middleware
 const handleEvent = require('./methods/eventHandler').handleEvent
+const initAlarm = require('./methods/mymenu_alarm').initAlarm
 
 app.get("/", (req, res) => {
     res.sendStatus(200)
@@ -38,3 +39,5 @@ const option = {
 https.createServer(option, app).listen(sslport, () => {
     console.log(`[HTTPS] Server is started on port ${sslport}`);
 })
+
+initAlarm('T10:30:00')
