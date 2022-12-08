@@ -19,7 +19,6 @@ async function menu_dialogue(event) {
         const dates = getDates(when)
         const menudata = await MenuData.load(dates)
         const data = menudata.data
-        replyToken = event.replyToken
         createAndSendMessage(event, data)
     }
     catch(err) {
