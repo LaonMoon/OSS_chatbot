@@ -1,5 +1,6 @@
 import { insertreview,selectReview,selectmenurank,selectmenurankdescription } from "./rankDao";
-import pool from "../config/database";
+import pool from "../../config/database";
+
 
 export const createreview = async(menu,menu_rank,menu_description,)=>{
 try{
