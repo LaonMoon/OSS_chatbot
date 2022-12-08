@@ -7,5 +7,5 @@ const rankRouter = express.Router();
 rankRouter.get('/',getReviewsRanks);
 rankRouter.post('/',postReviews);
 
-export default rankRouter;
+export default rankRouter
 */

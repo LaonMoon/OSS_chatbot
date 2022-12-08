@@ -3,8 +3,7 @@ import {createreview,showReview,showMenuRank} from "./rankService"
 export const postReviews=async(menu,menu_rank,menu_description)=>{
 
     await createreview(menu,menu_rank,menu_description);
-
-
+    
     if(createreview){
         console.log("입력완료")
     }

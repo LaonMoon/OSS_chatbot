@@ -1,4 +1,3 @@
-
 import pool from "../config/database"
 // Return result object of sql
 async function Execute(sql) {

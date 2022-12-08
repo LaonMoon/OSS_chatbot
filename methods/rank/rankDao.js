@@ -1,4 +1,4 @@
-//create_time이 오늘 날자인 거 안에서 해당 menu의 rank를 평균으로 제공
+//create_time이 오늘 날자인 거 안에서 해당 menu의 rank를 평균으로 제공.
 export const selectmenurank = async(connection,menu)=>{
 
     const selectmenurankQuery = `select sum(menu_rank)/count(ID) from menu_review where DATE(created_time)=DATE(NOW())AND menu=?`;

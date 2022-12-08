@@ -2,7 +2,8 @@ import {postReviews, getReviewsRanks,getReviewsRanksDescription} from "./rank/ra
 //import compression from "compression"
 import methodOverride from "method-override"
 const User = require('../models/user').User
-//import cors from "cors"
+//import cors from "corsf"
+
 
 
 const line = require('@line/bot-sdk');
@@ -121,7 +122,6 @@ const showrank2=async(event,user)=>{
             console.log(user.state);
         }
     }catch(err){
-
         const rpT = event.replyToken;
         console.log(err);
         console.log("show rank2 error");
