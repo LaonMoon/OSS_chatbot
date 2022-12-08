@@ -43,34 +43,7 @@ async function review_Handler(event) {
             case ('review_reply') : {reply2(event,user); break;}
             case ('review_reply2') : {reply3(event,user); break;}
             case ('review_reply3') : {reply4(event,user); break;}
-            /*
-            case ('소반'):{
-                if(rankstate==2)showrank2(event);
-                if(showreviewstate==2)showreview2(event);
-                if(reviewstate==2)reply2(event);break;
-            }
-            case ('특식'):{
-                if(rankstate==2)showrank2(event);
-                if(showreviewstate==2)showreview2(event);
-                if(reviewstate==2)reply2(event);break;
-            }
-            case ('석식'):{
-                if(rankstate==2)showrank2(event);
-                if(showreviewstate==2)showreview2(event);
-                if(reviewstate==2)reply2(event);break;
-            }
-            case('0'):
-                if(reviewstate==3)reply3(event);break;
-            case('1'):
-                if(reviewstate==3)reply3(event);break;
-            case('2'):
-                if(reviewstate==3)reply3(event);break;
-            case('3'):
-                if(reviewstate==3)reply3(event);break;
-            case('4'):
-                if(reviewstate==3)reply3(event);break;
-            case('5'):
-                if(reviewstate==3)reply3(event);break;*/
+
         }
 
     }
@@ -122,7 +95,7 @@ const showrank2=async(event,user)=>{
             user.state = 'following'
             await user.save()
         }
-        if(!(menu=='소반' || menu=='특식' || menu=='석식'))
+        else if(!(menu=='소반' || menu=='특식' || menu=='석식'))
         {
             console.log("들어옴")
             const typemissmsg = {"type": "text", "text": "잘못 입력하셨습니다.\n 앞선 안내문에 따라 소반,특식,석식 중에서 입력해주십시오." +
