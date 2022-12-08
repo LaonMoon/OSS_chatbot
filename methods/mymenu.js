@@ -13,7 +13,6 @@ async function mymenu_dialogue(event) {
             case 'following': {await mymenu_following(event, user); break;}
             case 'mymenu_checkConfirm': {await mymenu_checkConfirm(event, user); break;}
             case 'mymenu_waitConfirm': {await mymenu_conclude(event, user); break;}
-            default: {break;}
         }
     }
     catch(err) {
@@ -60,25 +59,34 @@ async function mymenu_conclude(event, user) {
     switch(client_message.text) {
         case '1': {mymenu_confirm(event, user); break;}
         case '2': {mymenu_cancel(event, user); break;}
-        default: {
-            
-        }
+        //default: {mymenu_again(event, user); break;}
     }
 }
+
+async function mymenu_again(event, user) {
+    const text = "숫자를 정확하게 입력해주세요!"
+    const message = {
+        type: "text",
+        text: text
+    }
+    const replyToken = event.replyToken
+    user.buffer = null
+    user.state = 'following'
+    await user.save()
+    await client.replyMessage(replyToken, message)
+    mymenu_checkConfirm(event, user)
+}
+
+
 async function mymenu_confirm(event, user) {
-    const text1 = `“${user.buffer}” 등록되었습니다`
-    const text2 = `앞으로 "${user.buffer}" 나오는 날에 알려드릴게요!`
-    const message = [{
-            type: "text",
-            text: text1
-        },{
-            type: "text",
-            text: text2
-        }
-    ]
+    const text = `“${user.buffer}” 등록되었습니다`
+    const message = {
+        type: "text",
+        text: text
+    }
     const replyToken = event.replyToken
     await user.AddMenu(user.buffer)
-    user.buffer = null
+    user.buffer = '\0'
     user.state = 'following'
     await user.save()
     await client.replyMessage(replyToken, message)
@@ -90,13 +98,10 @@ async function mymenu_cancel(event, user) {
         text: text
     }
     const replyToken = event.replyToken
-    user.buffer = null
+    user.buffer = '\0'
     user.state = 'following'
     await user.save()
     await client.replyMessage(replyToken, message)
-
-}
-async function defaultAction(event, user) {
 
 }
 

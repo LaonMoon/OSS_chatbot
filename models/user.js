@@ -72,15 +72,10 @@ class User {
         try {
             let sql = `SELECT userId FROM user where userId = '${this.userId}'`
             let result = await db.Execute(sql)
-
-            // If there's no user matching this object's userId in database, then insert a new record.
-            if (result.length == 0) {
-                sql = `INSERT INTO user (userId, state, buffer, alarmTime) VALUES ('${this.userId}', '${this.state}', '${this.buffer}', '${this.alarmTime}');`
-                result = await db.Execute(sql)
-            }
-            // If there's already an user matching this object's userId in database, update the record.
-            else {
-                sql = `UPDATE user SET state = '${this.state}', buffer = '${this.buffer}', alarmTime = '${this.alarmTime}' where userId = '${this.userId}'`
+            sql = `INSERT INTO user (userId, state, buffer, alarmTime) VALUES ('${this.userId}', '${this.state}', '${this.buffer}', '${this.alarmTime}') ON DUPLICATE KEY UPDATE state = '${this.state}', buffer = '${this.buffer}', alarmTime = '${this.alarmTime}'`
+            result = await db.Execute(sql)
+            for(let menu of this.menuList) {
+                result = sql = `INSERT INTO user_menulist (userId, menu) VALUES ('${this.userId}', '${menu}') ON DUPLICATE KEY UPDATE menu='${menu}'`
                 result = await db.Execute(sql)
             }
             return result
