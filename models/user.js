@@ -134,6 +134,16 @@ class User {
             throw err
         }
     }
+    static async userNum() {
+        try {
+            let sql = 'SELECT userId FROM user'
+            let result = await db.Execute(sql)
+            return result.length
+        }
+        catch(err) {
+            throw err
+        }
+    }
 }
 
 module.exports.User = User

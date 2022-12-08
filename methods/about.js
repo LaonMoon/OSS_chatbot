@@ -1,17 +1,17 @@
 const Client = require('@line/bot-sdk').Client
-const TOKEN = 'channel token'
+const TOKEN = process.env.TOKEN
 const User = require('../models/user').User
-const pool = require('../config/database').pool
+const db = require('./database')
+const client = new Client({
+    channelAccessToken: TOKEN
+})
 
-function post_about(eventObj) {
+async function post_about(eventObj) {
     let total = User.TotalUser
     console.log(total)
-    const client = new Client({
-        channelAccessToken: TOKEN
-    })
     const replyToken = eventObj.replyToken
-    const userNum = TakeUserNum()
-    const reviewNum = TakeReviewNum()
+    const userNum = await TakeUserNum()
+    const reviewNum = await TakeReviewNum()
     const messages = [
         {
             "type":"text",
@@ -41,28 +41,14 @@ function post_about(eventObj) {
     client.replyMessage(replyToken, messages)
 }
 
-function TakeUserNum() {
-    pool.connect(function(err) {
-        if(err) throw err;
-        var sql = "SELECT userId FROM user";
-        pool.query(sql, function(err, result, fields) {
-            if(err) throw err;
-            const UserNum = result.length;
-        });
-    });
-    return UserNum 
+async function TakeUserNum() {
+    return await User.userNum()
 }
 
-function TakeReviewNum () {
-    pool.connect(function(err) {
-        if(err) throw err;
-        var sql = "SELECT *** review FROM ***";
-        pool.query(sql, function(err, result, fields) {
-            if(err) throw err;
-            const ReviewNum = result.length;
-        });
-    });
-    return ReviewNum
+async function TakeReviewNum () {
+    const sql = 'SELECT ID FROM menu_review'
+    const result = await db.Execute(sql)
+    return result.length
 }
 
 module.exports.post_about = post_about

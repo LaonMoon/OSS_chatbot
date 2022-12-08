@@ -167,7 +167,7 @@ function timerFunc(dateTime, user){
     else{
         let user_ind = User_Id_Arr.indexOf(user) // 유저 함수가 있는지 확인 후, 있으면 그 함수 삭제 후 재설정
         if (user_ind != -1 ){
-            intervalId = User_funcId_Arr[user_ind].FuncId
+            const intervalId = User_funcId_Arr[user_ind].FuncId
             clearInterval(intervalId)
             delete User_funcId_Arr[user_ind];
             delete User_Id_Arr[user_ind];
