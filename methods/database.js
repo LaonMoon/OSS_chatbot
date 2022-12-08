@@ -1,5 +1,4 @@
-const pool = require('../config/database').pool
-
+import pool from "../config/database"
 // Return result object of sql
 async function Execute(sql) {
     const conn =  await pool.getConnection()
