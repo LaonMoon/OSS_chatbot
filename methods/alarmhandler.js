@@ -8,30 +8,36 @@ const client = new line.Client({
 const User = require('../models/user').User
 const MenuData = require('../models/menudata').MenuData
 
+// 유저가 설정한 알람 함수의 Id를 저장하기 위한 배열
 var User_funcId_Arr = [];
 var User_Id_Arr = [];
 
+// 유저 데이터 가져오기
 async function getUser(userId) {
     let user = await User.load(userId);
     return user;
 }
 
+// 유저 데이터 저장
 async function saveUser(user){
     await user.save();
     return true;
 }
 
+// 메뉴 데이터 가져오기
 async function getMenuData(Data){
     let menudata = await MenuData.load(Data)
     return menudata;
 }
 
+// 입력의 유효성 검사
 let IsInputOk = function (InputTime) {
 	let alarmdate = InputTime;
 	let time = Number(alarmdate.substring(0,2));
     let minute = Number(alarmdate.substring(2,4));
 	let year = new Date().getFullYear()
-
+    let desDay;
+    
 	if(desDay = new Date(year, time, minute) != NaN){
 		return true;
 	}
@@ -40,9 +46,9 @@ let IsInputOk = function (InputTime) {
 	}
 };
 
+// 알람 세팅
 function SetingAlarm (TargetTime, user) {
     setTimeout(async () => {
-        //clearInterval(intervalId);
         let daytime = 86400000;
         console.log("Alarm!!");
         let Data = GetDate();
@@ -105,11 +111,13 @@ function SetingAlarm (TargetTime, user) {
     }, TargetTime)
 }
 
+// 유저의 함수 저장
 function SetUserFunc(user, intervalId) {
     User_funcId_Arr.push({UserId : user, FuncId : intervalId});
     User_Id_Arr.push(user);
 }
 
+// 메뉴 Key 설정
 function GetDate(){
     let today = new Date();
     let todayms = today.getTime();
@@ -129,6 +137,7 @@ function GetDate(){
     return Target;     
 }
 
+// 타이머 설정 함수
 function timerFunc(dateTime, user){
     let time = Number(dateTime.substring(0,2));
     let minute = Number(dateTime.substring(2,4));
@@ -147,11 +156,16 @@ function timerFunc(dateTime, user){
     let oprDate = new Date(year, month, day, time, minute); //동작을 원하는 시간의 Date 객체를 생성합니다.
   
     let timer = oprDate.getTime() - KoreaToday.getTime(); //동작시간의 밀리세컨과 현재시간의 밀리세컨의 차이를 계산합니다.
+    if(timer < 0){
+        let oprDatems = oprDate.getTime() + 86400000;
+        timer = oprDatems - KoreaToday.getTime();
+    }
+    
     if(timer < 0){ //타이머가 0보다 작으면 함수를 종료합니다.
         return ("Error")
     }
     else{
-        let user_ind = User_Id_Arr.indexOf(user)
+        let user_ind = User_Id_Arr.indexOf(user) // 유저 함수가 있는지 확인 후, 있으면 그 함수 삭제 후 재설정
         if (user_ind != -1 ){
             intervalId = User_funcId_Arr[user_ind].FuncId
             clearInterval(intervalId)
@@ -163,7 +177,7 @@ function timerFunc(dateTime, user){
     }
 }
 
-
+// 메인 핸들러
 async function Alarm_Handler (eventObj) {
     let InputUserId = eventObj.source.userId;
     let repTok = eventObj.replyToken;
@@ -222,7 +236,7 @@ async function Alarm_Handler (eventObj) {
                 })
             }
             else {
-                let ErrMsg = "Alarm setting Error!"
+                let ErrMsg = "입력 범위를 벗어났습니다!"
                 const message = {
                     type: 'text',
                     text: ErrMsg,
@@ -304,7 +318,7 @@ async function Alarm_Handler (eventObj) {
         let Repmsg;
 
         if(!(IsInputOk(alarmdate))){
-            Errmsg = "Alarm set Error";
+            Errmsg = "유효하지 않은 입력입니다!";
             const message = {
                 type: 'text',
                 text: Errmsg
@@ -322,7 +336,7 @@ async function Alarm_Handler (eventObj) {
         let retm = timerFunc(alarmdate, InputUserId);
         console.log(retm);
         if(retm == "Error"){
-            Errmsg = "TimeSetError"
+            Errmsg = "시간 입력이 잘못되었습니다!"
             const message = {
                 type: 'text',
                 text: Errmsg
