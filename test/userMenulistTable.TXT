@@ -1,8 +1,0 @@
-CREATE TABLE `user_menulist` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `userId` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `menu` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `userId` (`userId`),
-  CONSTRAINT `user_menulist_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`)
-)

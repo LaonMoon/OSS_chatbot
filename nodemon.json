@@ -1,3 +1,0 @@
-{
-    "exec":"npx babel-node index.js"
-}
