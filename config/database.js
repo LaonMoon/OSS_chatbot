@@ -4,11 +4,11 @@ dotenv.config()
 const mysql = require('mysql2/promise')
 
 const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'Abc7878!',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
     connectionLimit: 4,
-    database: 'osschatbotdb'
+    database: process.env.DB_DATABASE
 })
 
 export default pool
