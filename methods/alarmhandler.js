@@ -43,7 +43,7 @@ let IsInputOk = function (InputTime) {
 function SetingAlarm (TargetTime, user) {
     setTimeout(async () => {
         //clearInterval(intervalId);
-        let daytime = 60000; //86400000;
+        let daytime = 86400000;
         console.log("Alarm!!");
         let Data = GetDate();
         console.log(Data)
