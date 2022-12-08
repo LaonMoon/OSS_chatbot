@@ -1,7 +1,8 @@
 const line = require('@line/bot-sdk');
+const TOKEN = process.env.TOKEN
 
 const client = new line.Client({
-    channelAccessToken: Token
+    channelAccessToken: TOKEN
 });
 
 const User = require('../models/user').User
@@ -39,61 +40,126 @@ let IsInputOk = function (InputTime) {
 	}
 };
 
+function SetingAlarm (TargetTime, user) {
+    setTimeout(async () => {
+        //clearInterval(intervalId);
+        let daytime = 60000; //86400000;
+        console.log("Alarm!!");
+        let Data = GetDate();
+        console.log(Data)
+        getMenuData([Data]).then( (menudata) => {
+            let pushhaed = '딩동! 오늘의 메뉴는 “'
+            let pushtail = '”입니다! 어서 가서 먹어볼까요?';
+            const message = [{
+                type: 'text',
+                text: pushhaed,
+            },
+            {
+                type: 'text',
+                text: `${menudata.data[0].lunch_A}`,
+            },
+            {
+                type: 'text',
+                text: `${menudata.data[0].lunch_B}`,
+            },
+            {
+                type: 'text',
+                text: `${menudata.data[0].dinner}`,
+            },
+            {
+                type: 'text',
+                text: pushtail,
+            }];
+            client.pushMessage(user, message);
+            let intervalId = (setInterval(async () => {
+                    console.log(new Date())
+                    let DayData = GetDate();
+                    getMenuData([DayData]).then( (menudata) => {
+                        let pushhaed = '딩동! 오늘의 메뉴는 “'
+                        let pushtail = '”입니다! 어서 가서 먹어볼까요?';
+                        const message = [{
+                            type: 'text',
+                            text: pushhaed,
+                        },
+                        {
+                            type: 'text',
+                            text: `${menudata.data[0].lunch_A}`,
+                        },
+                        {
+                            type: 'text',
+                            text: `${menudata.data[0].lunch_B}`,
+                        },
+                        {
+                            type: 'text',
+                            text: `${menudata.data[0].dinner}`,
+                        },
+                        {
+                            type: 'text',
+                            text: pushtail,
+                        }];
+                        client.pushMessage(user, message);
+                    })      
+                }, daytime));
+            SetUserFunc(user, intervalId)
+        });
+    }, TargetTime)
+}
+
+function SetUserFunc(user, intervalId) {
+    User_funcId_Arr.push({UserId : user, FuncId : intervalId});
+    User_Id_Arr.push(user);
+}
+
+function GetDate(){
+    let today = new Date();
+    let todayms = today.getTime();
+    todayms = todayms + 32400000;
+
+    let KoreaToday = new Date(todayms);
+    let year = KoreaToday.getFullYear();
+    let month = KoreaToday.getMonth();
+    let day = KoreaToday.getDate();
+    month = month + 1;
+
+    let Targetmonth = (month < 10) ? `0${month}` : String(month)
+    let Targetday = (day < 10) ? `0${day}` : String(day)
+   
+    let Target = `${year}-${Targetmonth}-${Targetday}`
+    console.log(Target)
+    return Target;     
+}
+
 function timerFunc(dateTime, user){
     let time = Number(dateTime.substring(0,2));
     let minute = Number(dateTime.substring(2,4));
     let today = new Date()
-    let year = today.getFullYear()
-    let month = today.getMonth()
-    let day = today.getDate()
+    let todayms = today.getTime();
+    let offset = 32400000;
+    todayms = todayms + offset;
+
+    let KoreaToday = new Date(todayms);
+
+
+    let year = KoreaToday.getFullYear()
+    let month = KoreaToday.getMonth()
+    let day = KoreaToday.getDate()
   
     let oprDate = new Date(year, month, day, time, minute); //동작을 원하는 시간의 Date 객체를 생성합니다.
-    let nowDate = new Date();
   
-    let timer = oprDate.getTime() - nowDate.getTime(); //동작시간의 밀리세컨과 현재시간의 밀리세컨의 차이를 계산합니다.
-    let offset = 32400000;
-    timer = timer - offset;
+    let timer = oprDate.getTime() - KoreaToday.getTime(); //동작시간의 밀리세컨과 현재시간의 밀리세컨의 차이를 계산합니다.
     if(timer < 0){ //타이머가 0보다 작으면 함수를 종료합니다.
         return ("Error")
     }
     else{
-        let daytime = 60000; //86400000;
-        setTimeout(async () => {
-            let intervalId;
-            //clearInterval(intervalId);
-            console.log("Alarm!!");
-            let Data = '1500';
-            getMenuData(Data).then( (menudata) => {
-                let pushmsg = `딩동! 오늘의 메뉴는 “${menudata.data[0].lunch_A}, ${menudata.data[0].lunch_B}, ${menudata.data[0].dinner}”입니다! 어서 가서 먹어볼까요?`;
-                const message = {
-                    type: 'text',
-                    text: pushmsg,
-                };
-                client.pushMessage(user, message);
-                
-                let user_ind = User_Id_Arr.indexOf(user)
-                if (user_ind != -1 ){
-                    intervalId = User_funcId_Arr[user_ind]
-                    clearInterval(intervalId)
-                    delete User_funcId_Arr[user_ind];
-                    delete User_Id_Arr[user_ind];
-                }
-                intervalId = setInterval(async () => {
-                    console.log(new Date())
-                    getMenuData(Data).then( (menudata) => {
-                        let pushmsg = `딩동! 오늘의 메뉴는 “${menudata.data[0].lunch_A}, ${menudata.data[0].lunch_B}, ${menudata.data[0].dinner}”입니다! 어서 가서 먹어볼까요?`;
-                        const message = {
-                            type: 'text',
-                            text: pushmsg,
-                        };
-                        client.pushMessage(user, message);
-                    })      
-                }, daytime);
-                User_funcId_Arr.push({UserId : user, FuncId : intervalId});
-                User_Id_Arr.push(user);
-            });
-        }, timer)
-        return ("Alarm seting!")
+        let user_ind = User_Id_Arr.indexOf(user)
+        if (user_ind != -1 ){
+            intervalId = User_funcId_Arr[user_ind].FuncId
+            clearInterval(intervalId)
+            delete User_funcId_Arr[user_ind];
+            delete User_Id_Arr[user_ind];
+        }
+        SetingAlarm(timer, user);
+         return ("Alarm seting!")
     }
 }
 
@@ -181,7 +247,12 @@ async function Alarm_Handler (eventObj) {
                         alarmdate =`0${word.substring(0,1)}00`
                     }
                 else if (/[0-1][0-9]시/.test(word)){
-                    alarmdate =`${word.substring(0,2)}00`
+                    let temptime = Number(word.substring(0,2));
+                        temptime;
+                        if(temptime > 12){
+                            temptime = 12;
+                        }
+                    alarmdate =`${temptime}00`
                 }
                 }
             }
@@ -189,10 +260,17 @@ async function Alarm_Handler (eventObj) {
                 const words = str.match(/([0-1]?[0-9]시)+/)
                 for (let word of words){
                     if(/[0-9]시/.test(word)){
-                        alarmdate =`0${word.substring(0,1)}00`
+                        let temptime = Number(word.substring(0,1));
+                        temptime = temptime + 12;
+                        alarmdate =`${temptime}00`
                     }
                     else if (/[0-1][0-9]시/.test(word)){
-                        alarmdate =`${word.substring(0,2)}00`
+                        let temptime = Number(word.substring(0,2));
+                        temptime = temptime + 12;
+                        if(temptime > 24){
+                            temptime = 24;
+                        }
+                        alarmdate =`${temptime}00`
                     }
                 }
             }
