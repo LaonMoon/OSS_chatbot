@@ -1,5 +1,10 @@
 const line = require('@line/bot-sdk');
+<<<<<<< HEAD
 const TOKEN = process.env.TOKEN
+=======
+const TOKEN = process.env.TOKEN || 'n/FsngKwPgrLhglag8dqI994iPBAFGlWAZ049Hiq1F5tsguZbDxksyWj3zskC0TFsCOCGraTNp0yg7YLdTm+wOZeDuUKNuu/2Xvz9azWjqMyKy3t+68MjDEK50ytYmjcQFImAvBJ5hC1ZayLOqHcSwdB04t89/1O/w1cDnyilFU='
+
+>>>>>>> master
 
 const client = new line.Client({
     channelAccessToken: TOKEN
@@ -163,6 +168,7 @@ function timerFunc(dateTime, user){
     }
 }
 
+<<<<<<< HEAD
 
 async function Alarm_Handler (eventObj) {
     let InputUserId = eventObj.source.userId;
@@ -174,6 +180,44 @@ async function Alarm_Handler (eventObj) {
             let Repmsg  = "입력 형식을 지정해주세요.\n 1) 오전 @시 2) 오후 @시 3) 사용자 입력 ex) 00:00"
             let examMsg = "1, 2, 3 중 선택하지 않을시 에러 발생"
             const message = [{
+=======
+async function Alarm_Handler (eventObj) {
+    let InputUserId = eventObj.source.userId;
+    let repTok = eventObj.replyToken;
+    let user = await User.load(InputUserId);
+    if (user.state == "following"){
+        // 알람 설정 UI reply
+        let Repmsg  = "입력 형식을 지정해주세요.\n 1) 오전 @시 2) 오후 @시 3) 사용자 입력 ex) 00:00"
+        let examMsg = "1, 2, 3 중 선택하지 않을시 에러 발생"
+        const message = [{
+            type: 'text',
+            text: Repmsg,
+          },
+        {
+            type: 'text',
+            text: examMsg,
+        }
+        ];
+        client.replyMessage(repTok, message)
+        user.state == "alarmSetting"
+    }
+    else if (user.state == "alarmSetting"){
+        let str = eventObj.message.text
+        if (/[1-3]/.test(str)){
+            let Repmsg;
+            switch (str){
+                case '1':
+                    Repmsg = "오전 @시 형태로 입력해주세요. ex) 오전 9시";
+                    break;
+                case '2':
+                    Repmsg = "오후 @시 형태로 입력해주세요. ex) 오후 1시";
+                    break;
+                case '3':
+                    Repmsg = "구체적인 시간을 다음의 형태로 입력해주세요 00:00 or 0000 ex) 09:27";
+                    break;
+            }
+            const message = {
+>>>>>>> master
                 type: 'text',
                 text: Repmsg,
               },

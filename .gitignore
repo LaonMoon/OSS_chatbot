@@ -1,1 +1,8 @@
-node_module/
+#dotenv enviroment variable files
+.env
+
+#node_modules
+/node_modules
+
+#code for test
+test.js

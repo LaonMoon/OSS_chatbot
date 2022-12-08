@@ -1,7 +1,9 @@
 # OSS_chatbot
+## About the project
 
 **“안녕하세요, 경희대학교 제2기숙사 학식 알리미 챗봇입니다. 무엇을 도와드릴까요?”**
 
+**"Hello, This is the 2nd dormitory cafeteria menu notification chatbot at Kyunghee University. How can I help you?"**
 
 - **기본적인 대화**
 - **[help]**
@@ -22,17 +24,11 @@
     **C : 사용할 수 있는 명령을 보여드려요. (위의 명령어 내용 출력)**
     
     
-- “about, 서비스 소개” 등의 명령어를 입력하여 봇에 대한 간략한 설명(및 이용자 수)를 볼 수 있다. 사용자 현황 및 현재 누적 리뷰 수, 누적 사용자 수 등
+- “about, 서비스 소개” 등의 명령어를 입력하여 봇에 대한 간략한 설명을 볼 수 있다.
     - input : about, 서비스 소개
     - 동작 :
     
     > 제2기숙사 학식 알리미 챗봇에 대한 설명입니다.
-    > 
-    
-    > 누적 사용자 수 :
-    > 
-    
-    > 오늘의 식단 리뷰 수 :
     > 
     
     > 그 외 설명 : 개발자 소개, 서비스 시작 날짜 등
@@ -131,3 +127,38 @@
 - (★ 이후 실행) → 정해진 시간에 메뉴 알림
     - 사용자가 지정한 시간이 되었을 경우 오늘의 메뉴에 대한 메세지를 보낸다. 시간대에 따라 점심 이전일 경우 점심과 저녁 메뉴 모두 보내주고, 저녁 시간일 경우 저녁 메뉴만 보내준다.
     - “**딩동! 오늘의 메뉴는 “눈꽃돈까스”입니다! 어서 가서 먹어볼까요?”**
+    
+## **Getting Started ( Installation )**
+
+## **Usage**
+
+You can use demo chatbot at this page.
+
+## **Roadmap**
+
+- [X] Make Default Chatbot
+- [X] Crate Database
+- [ ] Add new feature
+
+## **Contributing**
+
+@3un0ia
+
+@Baejjjjjjjj
+
+@HeySueng
+
+@InseopSeo
+
+@jamm-king
+
+@LaonMoon
+
+## **License**
+
+Apache License 2.0
+
+## **Contact**
+
+laonm@khu.ac.kr
+
