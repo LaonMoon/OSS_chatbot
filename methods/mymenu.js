@@ -39,7 +39,11 @@ async function mymenu_following(event, user) {
 async function mymenu_checkConfirm(event, user) {
     try{
         const client_message = event.message
+        if (typeof(client_message.text) !== 'string') {
+            const text = "올바른 메뉴 이름을 적어주세요!"
+        } else {
         const text = `“${client_message.text}” 좋아하는 메뉴로 지정하시겠습니까?\n1) 예, 2) 아니오`
+        }
         const message = {
             type: "text",
             text: text
@@ -59,8 +63,25 @@ async function mymenu_conclude(event, user) {
     switch(client_message.text) {
         case '1': {mymenu_confirm(event, user); break;}
         case '2': {mymenu_cancel(event, user); break;}
+        default: {mymenu_again(event, user)}
     }
 }
+
+async function mymenu_again(event, user) {
+    const text = "숫자를 정확하게 입력해주세요!"
+    const message = {
+        type: "text",
+        text: text
+    }
+    const replyToken = event.replyToken
+    user.buffer = '\0'
+    user.state = 'following'
+    await user.save()
+    await client.replyMessage(replyToken, message)
+    mymenu_checkConfirm(event, user)
+}
+
+
 async function mymenu_confirm(event, user) {
     const text = `“${user.buffer}” 등록되었습니다`
     const message = {
