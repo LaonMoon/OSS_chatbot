@@ -26,13 +26,7 @@ export const selectUser = async (connection) =>{
     return userRows;
 }
 
-/*export const insertUser = async (connection) =>{
-    const selectUserListQuery = `INSERT ;`
-    const [userRows] = await connection.query(selectUserListQuery);
-    return userRows;
-}*/
 
-//review insert 
 export const insertreview = async(connection, insertreviewParams)=>{
     try{
     

@@ -97,7 +97,7 @@ const showrank2=async(event,user)=>{
         }
         else if(!(menu=='소반' || menu=='특식' || menu=='석식'))
         {
-            console.log("들어옴")
+
             const typemissmsg = {"type": "text", "text": "잘못 입력하셨습니다.\n 앞선 안내문에 따라 소반,특식,석식 중에서 입력해주십시오." +
                     "\n(만약 평점 확인 기능을 종료하고 싶다면 '처음으로'라고 입력해주세요)"};
             client.replyMessage(rpT, typemissmsg);
@@ -112,24 +112,21 @@ const showrank2=async(event,user)=>{
                     type: 'text',
                     text: "사용자들이 입력한 점수의 평균은" + row['sum(menu_rank)/count(ID)'] + "입니다"
                 }
-                if(i<5){
-                messages.push(message);
-                }
 
+                messages.push(message)
             }
-            console.log(message)
             user.state = 'following'
             await user.save()
             client.replyMessage(rpT, messages);
             console.log(user.state);
         }
     }catch(err){
-        /*
+
         const rpT = event.replyToken;
         console.log(err);
         console.log("show rank2 error");
         client.replyMessage(rpT, errormsg);
-        */
+
 
 
     }
@@ -201,11 +198,11 @@ const showreview2=async(event,user)=>{
             console.log("show reivew2 sucess");
         }
     }catch(err){
-        /*
+        
         const rpT = event.replyToken;
         console.log("show review2 error");
         client.replyMessage(rpT, errormsg);
-        */
+
     }
 }
 

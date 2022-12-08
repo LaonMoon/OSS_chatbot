@@ -1,5 +1,5 @@
 const db = require("../methods/database")
-
+import pool from "../config/database"
 class User {
     /*
         - User is a class for handling data about user with database.
