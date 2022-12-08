@@ -11,6 +11,7 @@ function post_about(eventObj) {
     })
     const replyToken = eventObj.replyToken
     const userNum = TakeUserNum()
+    const reviewNum = TakeReviewNum()
     const messages = [
         {
             "type":"text",
@@ -22,10 +23,10 @@ function post_about(eventObj) {
             "text":`누적 사용자 수 : ${userNum} `
         },
         // // DB에서 오늘의 식단 리뷰 정보 가져오기    
-        // {
-        //     "type":"text",
-        //     "text":`오늘의 식단 리뷰 수 : ${%num%total} `
-        // },
+        {
+             "type":"text",
+             "text":`오늘의 식단 리뷰 수 : ${reviewNum} `
+        },
         // 그 외 정보
         {
             "type":"text",
@@ -46,10 +47,22 @@ function TakeUserNum() {
         var sql = "SELECT userId FROM user";
         pool.query(sql, function(err, result, fields) {
             if(err) throw err;
-            const num = result.length;
+            const UserNum = result.length;
         });
     });
-    return num 
+    return UserNum 
+}
+
+function TakeReviewNum () {
+    pool.connect(function(err) {
+        if(err) throw err;
+        var sql = "SELECT *** review FROM ***";
+        pool.query(sql, function(err, result, fields) {
+            if(err) throw err;
+            const ReviewNum = result.length;
+        });
+    });
+    return ReviewNum
 }
 
 module.exports.post_about = post_about
