@@ -1,6 +1,7 @@
 const Client = require('@line/bot-sdk').Client
 const TOKEN = 'channel token'
 const User = require('../models/user').User
+const pool = require('../config/database').pool
 
 function post_about(eventObj) {
     let total = User.TotalUser
@@ -9,25 +10,26 @@ function post_about(eventObj) {
         channelAccessToken: TOKEN
     })
     const replyToken = eventObj.replyToken
+    const userNum = TakeUserNum()
     const messages = [
         {
             "type":"text",
             "text":"제2기숙사 학식 알리미 챗봇에 대한 설명입니다."
         },
         // DB에서 누적 사용자 데이터 가져오기
-        // {
-        //     "type":"text",
-        //     "text":"누적 사용자 수 : %num"%total
-        // },        
+        {
+            "type":"text",
+            "text":`누적 사용자 수 : ${userNum} `
+        },
         // // DB에서 오늘의 식단 리뷰 정보 가져오기    
         // {
         //     "type":"text",
-        //     "text":"오늘의 식단 리뷰 수 :"
+        //     "text":`오늘의 식단 리뷰 수 : ${%num%total} `
         // },
         // 그 외 정보
         {
             "type":"text",
-            "text":"2022 오픈소스SW개발 팀프로젝트로 진행되었으며, 서비스 시작일은 12월 3일입니다."
+            "text":"2022 오픈소스SW개발 팀프로젝트로 진행되었으며, 서비스 시작일은 12월 9일입니다."
         },
         {
             "type":"text",
@@ -36,6 +38,18 @@ function post_about(eventObj) {
     ]
 
     client.replyMessage(replyToken, messages)
+}
+
+function TakeUserNum() {
+    pool.connect(function(err) {
+        if(err) throw err;
+        var sql = "SELECT userId FROM user";
+        pool.query(sql, function(err, result, fields) {
+            if(err) throw err;
+            const num = result.length;
+        });
+    });
+    return num 
 }
 
 module.exports.post_about = post_about
