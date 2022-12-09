@@ -107,14 +107,19 @@ const showrank2=async(event,user)=>{
             const reviewdata = await getReviewsRanks(menu);
             const dataString = JSON.stringify(reviewdata);
             let messages = []
-            for (let row of reviewdata) {
-                let i = 0;
-                const message = {
-                    type: 'text',
-                    text: "사용자들이 입력한 점수의 평균은" + row['sum(menu_rank)/count(ID)'] + "입니다"
-                }
+            if (reviewdata[0]['sum(menu_rank)/count(ID)'] == null) {
+                messages.push({type : 'text', text : "리뷰가 없습니다. 리뷰를 입력해주세요"})
+            }
+            else {
+                for (let row of reviewdata) {
+                    let i = 0;
+                    const message = {
+                        type: 'text',
+                        text: "사용자들이 입력한 점수의 평균은" + row['sum(menu_rank)/count(ID)'] + "입니다"
+                    }
 
-                messages.push(message)
+                    messages.push(message)
+                }
             }
             user.state = 'following'
             await user.save()
@@ -175,24 +180,24 @@ const showreview2=async(event,user)=>{
             let messages = []
             let i = 1;
             let j = 0;
-            if(!showreviewdata){
-                const message = {type : 'text', text : "리뷰가 없습니다. 리뷰를 입력해주세요"}
-
+            if(showreviewdata.length == 0){
+                messages.push({type : 'text', text : "리뷰가 없습니다. 리뷰를 입력해주세요"})
             }
-            for (let row of showreviewdata) {
-                let ii = String(i);
+            else {
+                for (let row of showreviewdata) {
+                    let ii = String(i);
 
-                const message = {
-                    type: 'text',
-                    text: ii + "번째 후기\n" + "메뉴 rank : " + row.menu_rank + "\n" + "메뉴 후기 : " + row.menu_description
+                    const message = {
+                        type: 'text',
+                        text: ii + "번째 후기\n" + "메뉴 rank : " + row.menu_rank + "\n" + "메뉴 후기 : " + row.menu_description
+                    }
+
+                    if(j<5){messages.push(message)}
+                    i++
+                    j++
                 }
-
-                if(j<5){messages.push(message)}
-                i++
-                j++
             }
-            console.log(messages)
-            client.replyMessage(rpT, messages);
+            await client.pushMessage(user.userId, messages);
             user.state = 'following';
             await user.save();
             console.log("show reivew2 sucess");
