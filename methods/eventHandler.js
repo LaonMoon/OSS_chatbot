@@ -1,5 +1,7 @@
 const https = require('https')
+const { execPath } = require('process')
 const User = require('../models/user').User
+const MenuData = require('../models/menudata').MenuData
 const message_help = require('./help').message_help
 const post_about = require('./about').post_about
 const menu_dialogue = require('./menu').menu_dialogue
@@ -30,6 +32,20 @@ async function handleEvent(event) {
     else {
         user = new User(userId)
         await user.save()
+    }
+    try {
+        const raw = await MenuData.GetMenuData()
+        const data = await MenuData.ProcessData(raw)
+        const menudata = new MenuData(data)
+        await menudata.save()
+    }
+    catch(err) {
+        if (err.message.includes("Duplicate")){
+            // do nothing
+        }
+        else {
+            throw err
+        }
     }
 
     if(user.state == "following") {
