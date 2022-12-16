@@ -74,17 +74,21 @@ async function mymenu_again(event, user) {
 
 
 async function mymenu_confirm(event, user) {
-    const text = `“${user.buffer}” 등록되었습니다`
-    const message = {
-        type: "text",
-        text: text
-    }
+    const text1 = `“${user.buffer}” 등록되었습니다.`
+    const text2 = `식단에 등록하신 메뉴가 있는 날이면 아침 10시 30분에 알려드릴게요!`
+    const messages = [{
+            type: "text",
+            text: text1
+        },{
+            type: "text",
+            text: text2
+        }]
     const replyToken = event.replyToken
     await user.AddMenu(user.buffer)
     user.buffer = '\0'
     user.state = 'following'
     await user.save()
-    await client.replyMessage(replyToken, message)
+    await client.replyMessage(replyToken, messages)
 }
 async function mymenu_cancel(event, user) {
     const text = '취소되었습니다.'
@@ -97,7 +101,6 @@ async function mymenu_cancel(event, user) {
     user.state = 'following'
     await user.save()
     await client.replyMessage(replyToken, message)
-
 }
 
 module.exports.mymenu_dialogue = mymenu_dialogue

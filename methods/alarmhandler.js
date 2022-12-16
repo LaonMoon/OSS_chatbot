@@ -181,8 +181,9 @@ function timerFunc(dateTime, user){
 async function Alarm_Handler (eventObj) {
     let InputUserId = eventObj.source.userId;
     let repTok = eventObj.replyToken;
+    let alarmdate = ""
 
-    getUser(InputUserId).then ( (user) => {
+    getUser(InputUserId).then (async (user) => {
         if (user.state == "following"){
             // 알람 설정 UI reply
             let Repmsg  = "입력 형식을 지정해주세요.\n 1) 오전 @시 2) 오후 @시 3) 사용자 입력 ex) 00:00"
@@ -253,7 +254,7 @@ async function Alarm_Handler (eventObj) {
         }
         else if (user.state == "alarm_AlarmSet"){
             let str = eventObj.message.text
-            let alarmdate;
+
             if (/오전.+/.test(str)){
                 const words = str.match(/([0-1]?[0-9]시)+/)
                 for (let word of words){
@@ -307,12 +308,13 @@ async function Alarm_Handler (eventObj) {
                     };
                 client.replyMessage(repTok, message)
                 user.state = "following"
-                saveUser(user).then( isUserSave => {
+                await saveUser(user).then( isUserSave => {
                     if(isUserSave){
                         console.log ("AlarmHandler_UserIdSave!!");
                         return;
                     }
                 })
+                return
             }
         let Errmsg;
         let Repmsg;
@@ -365,7 +367,7 @@ async function Alarm_Handler (eventObj) {
                     return;
                 }
             })
-        }
+        }        
         }
     })
 }
